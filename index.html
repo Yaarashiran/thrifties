@@ -126,40 +126,16 @@
             let markers = [];
             // Array to store favorite markers
             let favorites = [];
-            // Variable to store the currently open info window
-            let currentInfoWindow = null;
 
             // Add a click event listener to the map to place a marker
-            map.addListener('click', async function(event) {
+            map.addListener('click', function(event) {
                 const description = prompt("Enter a title for this location:");
                 if (description) {
                     const category = prompt("Optional: Enter a category for this location (leave blank to skip):");
-                    const photoUrl = await uploadImage(); // Allow user to upload an image
+                    const photoUrl = prompt("Optional: Enter a photo URL for this location (leave blank to skip):");
                     const link = prompt("Optional: Enter a website link for this location (leave blank to skip):");
                     placeMarker(event.latLng, map, description, category, photoUrl, link, markers);
                 }
-            });
-        }
-
-        // Function to allow image upload and return a data URL
-        function uploadImage() {
-            return new Promise((resolve) => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*'; // Accept only image files
-                input.onchange = (event) => {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            resolve(e.target.result); // Resolve with the data URL
-                        };
-                        reader.readAsDataURL(file); // Convert file to data URL
-                    } else {
-                        resolve(null); // Resolve with null if no file is selected
-                    }
-                };
-                input.click(); // Trigger the file input dialog
             });
         }
 
@@ -194,14 +170,7 @@
 
             // Add a click listener to the marker to open the info window
             marker.addListener('click', function() {
-                // Close the currently open info window, if any
-                if (currentInfoWindow) {
-                    currentInfoWindow.close();
-                }
-                // Open the new info window
                 infoWindow.open(map, marker);
-                // Update the currently open info window
-                currentInfoWindow = infoWindow;
                 highlightCategory(category); // Highlight the relevant category button
             });
 
