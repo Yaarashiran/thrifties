@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creators Map</title>
+    <title>Independent Creators Map</title>
     <style>
         /* Set the size of the map */
         #map {
@@ -110,6 +110,32 @@
         #bubble-list li:hover {
             background-color: #f0f0f0; /* Hover effect */
         }
+        /* Style for "The Daily Popular" section */
+        #daily-popular {
+            margin-top: 20px;
+        }
+        #daily-popular h3 {
+            font-size: 20px;
+            color: #333;
+        }
+        #daily-popular ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #daily-popular li {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 10px; /* Square shape with rounded corners */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #daily-popular li:hover {
+            background-color: #f0f0f0; /* Hover effect */
+        }
     </style>
 </head>
 <body>
@@ -143,6 +169,18 @@
             <li onclick="filterMarkers('accessories')">Accessories</li>
             <li onclick="filterMarkers('wood')">Wood</li>
         </ul>
+
+        <!-- "The Daily Popular" section -->
+        <div id="daily-popular">
+            <h3>The Daily Popular</h3>
+            <ul>
+                <li onclick="showPopularItem('Trending Artwork')">Trending Artwork</li>
+                <li onclick="showPopularItem('Handmade Jewelry')">Handmade Jewelry</li>
+                <li onclick="showPopularItem('Vintage Collectibles')">Vintage Collectibles</li>
+                <li onclick="showPopularItem('Wooden Crafts')">Wooden Crafts</li>
+                <li onclick="showPopularItem('Designer Accessories')">Designer Accessories</li>
+            </ul>
+        </div>
     </div>
 
     <!-- Google Maps JavaScript API -->
@@ -300,6 +338,11 @@
                     button.classList.remove('highlighted'); // Remove highlight from other buttons
                 }
             });
+        }
+
+        // Function to show popular item details
+        function showPopularItem(item) {
+            alert(`You clicked on: ${item}. This feature is under development. Stay tuned!`);
         }
     </script>
 
