@@ -8,12 +8,13 @@
         /* Set the size of the map */
         #map {
             height: 100vh; /* Full viewport height */
-            width: 100%;   /* Full width */
+            width: 70%;   /* Adjusted to make space for the categories list */
         }
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif; /* Optional: Set a font */
+            display: flex;
         }
         /* Style for the title */
         #title {
@@ -77,6 +78,38 @@
         #favorites-list li:last-child {
             border-bottom: none;
         }
+        /* Style for the categories list */
+        #categories-list {
+            width: 30%; /* Adjusted to take up 30% of the page width */
+            height: 100vh;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #ccc;
+            overflow-y: auto; /* Enable scrolling if content overflows */
+        }
+        #categories-list h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+        }
+        #categories-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #categories-list li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 20px; /* Bubble shape */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #categories-list li:hover {
+            background-color: #f0f0f0; /* Hover effect */
+        }
     </style>
 </head>
 <body>
@@ -99,6 +132,20 @@
 
     <!-- Map container -->
     <div id="map"></div>
+
+    <!-- Categories list -->
+    <div id="categories-list">
+        <h3>Categories</h3>
+        <ul>
+            <li onclick="filterMarkers('basics')">Basics</li>
+            <li onclick="filterMarkers('furniture')">Furniture</li>
+            <li onclick="filterMarkers('apparel')">Apparel</li>
+            <li onclick="filterMarkers('hobbies')">Hobbies</li>
+            <li onclick="filterMarkers('luxury')">Luxury</li>
+            <li onclick="filterMarkers('vintage')">Vintage</li>
+            <li onclick="filterMarkers('design')">Design</li>
+        </ul>
+    </div>
 
     <!-- Google Maps JavaScript API -->
     <script>
