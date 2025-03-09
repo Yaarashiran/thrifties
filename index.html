@@ -13,11 +13,18 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f4;
+            background-image: url('https://dbdzm869oupei.cloudfront.net/img/quadres/preview/46624.png');
+            background-size: cover; /* Ensures the image covers the entire background */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-color: #f4f4f4; /* Fallback color in case the image doesn't load */
         }
         header {
             text-align: center;
             margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
+            padding: 20px;
+            border-radius: 10px;
         }
         h1 {
             font-size: 2em;
@@ -33,6 +40,9 @@
             display: grid;
             grid-template-columns: repeat(2, 150px);
             gap: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
+            padding: 20px;
+            border-radius: 10px;
         }
         .button {
             width: 150px;
@@ -40,8 +50,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #007BFF;
-            color: white;
+            background-color: #f5f5dc; /* Light cream color */
+            color: #333; /* Darker text color for better contrast */
             text-align: center;
             text-decoration: none;
             font-size: 1.2em;
@@ -49,7 +59,15 @@
             transition: background-color 0.3s ease;
         }
         .button:hover {
-            background-color: #0056b3;
+            background-color: #e0e0c8; /* Slightly darker cream color on hover */
+        }
+        /* Updated style for the "I am interested in:" title */
+        .interest-title {
+            color: #8b7355; /* Dark cream color */
+            background-color: #f8f8f8; /* Off-white background */
+            padding: 10px 20px; /* Add padding for better spacing */
+            border-radius: 10px; /* Rounded corners */
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -58,7 +76,7 @@
         <h1>Welcome to Thrifters</h1>
         <p class="subtitle">your neighborhood platform to buy, sell, and discover.</p>
     </header>
-    <h1>I am interested in:</h1>
+    <h1 class="interest-title">I am interested in:</h1> <!-- Added class to this h1 -->
     <div class="button-container">
         <a href="events-map.html" class="button">Events</a>
         <a href="secondhand.html" class="button">Second Hand</a>
