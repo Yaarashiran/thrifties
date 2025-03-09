@@ -110,6 +110,26 @@
         #categories-list li:hover {
             background-color: #f0f0f0; /* Hover effect */
         }
+        /* Style for the "Might Interest Me" section */
+        #might-interest-me {
+            margin-top: 20px;
+        }
+        #might-interest-me h3 {
+            font-size: 20px;
+            color: #333;
+        }
+        #might-interest-me div {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 20px; /* Bubble shape */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #might-interest-me div:hover {
+            background-color: #f0f0f0; /* Hover effect */
+        }
     </style>
 </head>
 <body>
@@ -145,6 +165,12 @@
             <li onclick="filterMarkers('vintage')">Vintage</li>
             <li onclick="filterMarkers('design')">Design</li>
         </ul>
+
+        <!-- "Might Interest Me" section -->
+        <div id="might-interest-me">
+            <h3>Might Interest Me</h3>
+            <div onclick="showInterestMeSuggestions()">Show Suggestions</div>
+        </div>
     </div>
 
     <!-- Google Maps JavaScript API -->
@@ -302,6 +328,11 @@
                     button.classList.remove('highlighted'); // Remove highlight from other buttons
                 }
             });
+        }
+
+        // Function to show "Might Interest Me" suggestions
+        function showInterestMeSuggestions() {
+            alert("This feature is under development. Stay tuned!");
         }
     </script>
 
