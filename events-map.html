@@ -85,11 +85,30 @@
             width: 25%; /* Adjusted to make the calendar smaller */
             height: 80vh; /* Adjusted height */
             padding: 20px;
-            background-image: url('https://www.jimchillington.com/wp-content/uploads/2024/12/IMG_4386.jpg'); /* Set background image */
+            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCPFNFxRkzhjTTHSBz5Ie7XmQjomlgZ-LMcVpgvo01cq92-i9AElfDgiggOXHW6kycB-fERwWKw3p8CN9M677rKr3iLESXETn-jE8mvJFAjWvpxh_Xa1uKYr9ZlhYftnRAyQVgRGrlwos/s400/JC_Greenwich+Ave+Madeline+in+Pink.jpg'); /* Set background image */
             background-size: cover; /* Ensure the image covers the entire container */
             background-position: center; /* Center the image */
             border-left: 1px solid #ccc;
             margin-top: 10vh; /* Add some margin at the top */
+            position: relative; /* Required for the overlay */
+        }
+
+        /* Overlay to make the background image transparent */
+        #calendar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.5); /* White overlay with 50% opacity */
+            z-index: 1; /* Place the overlay above the background image */
+        }
+
+        /* Ensure calendar content is above the overlay */
+        #calendar .fc {
+            position: relative;
+            z-index: 2; /* Place the calendar content above the overlay */
         }
     </style>
 </head>
@@ -241,9 +260,9 @@
         function toggleFavorites() {
             const favoritesList = document.getElementById('favorites-list');
             if (favoritesList.style.display === 'none' || favoritesList.style.display === '') {
-                favoritesList.style.display = 'block'; // Show the list
+                favoritesList.style.display = 'block'; /* Show the list */
             } else {
-                favoritesList.style.display = 'none'; // Hide the list
+                favoritesList.style.display = 'none'; /* Hide the list */
             }
         }
 
@@ -275,9 +294,9 @@
         function filterMarkers(category) {
             markers.forEach(marker => {
                 if (category === 'all' || marker.category === category) {
-                    marker.marker.setVisible(true); // Show marker
+                    marker.marker.setVisible(true); /* Show marker */
                 } else {
-                    marker.marker.setVisible(false); // Hide marker
+                    marker.marker.setVisible(false); /* Hide marker */
                 }
             });
         }
@@ -287,9 +306,9 @@
             const buttons = document.querySelectorAll('#category-filters button');
             buttons.forEach(button => {
                 if (button.textContent === category) {
-                    button.classList.add('highlighted'); // Highlight the button
+                    button.classList.add('highlighted'); /* Highlight the button */
                 } else {
-                    button.classList.remove('highlighted'); // Remove highlight from other buttons
+                    button.classList.remove('highlighted'); /* Remove highlight from other buttons */
                 }
             });
         }
