@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+     <head>
      <!-- Include Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
@@ -14,12 +15,22 @@ const firebaseConfig = {
   appId: "1:783907818946:web:85d4afc999d184fd9a5a5b",
   measurementId: "G-VQZJTTLZ3Z"
 };
-<head>
+          // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <!-- Your existing styles and scripts -->
+    <style>
+        /* Your existing CSS styles */
+    </style>
+</head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I am interested in:</title>
     <!-- Include Raleway font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
+
+         
     <style>
         body {
             font-family: 'Raleway', sans-serif; /* Set font to Raleway */
