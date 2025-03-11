@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Second Hand Map</title>
+    <title>Thrifters Second Hand</title>
     <style>
         /* Set the size of the map */
         #map {
@@ -83,7 +83,10 @@
             width: 30%; /* Adjusted to take up 30% of the page width */
             height: 100vh;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiuIsfKk3ZhyoGPllXm8yakOeZ_Pf1ZqlG-emPePdbctz784lPKqhvzJCQv6KYMIdkYBMZFwAQRrW03alu9vTRJ8uDCCd42wWCyfGANdmKoDMMVpe6eEwgTR2C4gHTJQ2wIuNK-1kryk1M/s400/6-18-16+additional+shoot.jpg'); /* Background photo */
+            background-size: cover; /* Ensures the image covers the entire background */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
             border-left: 1px solid #ccc;
             overflow-y: auto; /* Enable scrolling if content overflows */
         }
@@ -91,6 +94,10 @@
             margin-top: 0;
             font-size: 20px;
             color: #333;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
         }
         #categories-list ul {
             list-style-type: none;
@@ -100,7 +107,7 @@
         #categories-list li {
             margin: 10px 0;
             padding: 10px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
             border-radius: 20px; /* Bubble shape */
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -108,7 +115,7 @@
             transition: background-color 0.3s ease;
         }
         #categories-list li:hover {
-            background-color: #f0f0f0; /* Hover effect */
+            background-color: rgba(240, 240, 240, 0.8); /* Hover effect with transparency */
         }
         /* Style for the "Might Interest Me" section */
         #might-interest-me {
@@ -117,10 +124,14 @@
         #might-interest-me h3 {
             font-size: 20px;
             color: #333;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
         }
         #might-interest-me div {
             padding: 10px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
             border-radius: 20px; /* Bubble shape */
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -128,7 +139,7 @@
             transition: background-color 0.3s ease;
         }
         #might-interest-me div:hover {
-            background-color: #f0f0f0; /* Hover effect */
+            background-color: rgba(240, 240, 240, 0.8); /* Hover effect with transparency */
         }
     </style>
 </head>
