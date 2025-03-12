@@ -7,7 +7,90 @@
     <!-- FullCalendar CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
     <style>
-        /* Your existing CSS styles */
+        /* Set the size of the map */
+        #map {
+            height: 120vh; /* Full viewport height */
+            width: 70%;   /* Adjusted to make space for the calendar */
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif; /* Optional: Set a font */
+            display: flex;
+        }
+        /* Style for the title */
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 224, 0.8); /* Light yellow with 80% opacity */
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: black; /* Black text for better contrast */
+        }
+        /* Style for category filter buttons */
+        #category-filters {
+            position: absolute;
+            top: 60px; /* Adjusted to make space for the title */
+            left: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        #category-filters button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        /* Style for highlighted category button */
+        #category-filters button.highlighted {
+            background-color: yellow; /* Highlight color */
+        }
+        /* Style for the favorites list */
+        #favorites-list {
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            display: none; /* Hidden by default */
+        }
+        #favorites-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #favorites-list li {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        #favorites-list li:last-child {
+            border-bottom: none;
+        }
+        /* Style for the calendar container */
+        #calendar {
+            width: 25%; /* Adjusted to make the calendar smaller */
+            height: 80vh; /* Adjusted height */
+            padding: 20px;
+            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjQ1VCW5siDdm7DVHIjOG4Cwh8mNHH2EE6EEAkMsaJArmBSPIn3-SX-x6fl-tlOdscNYO53ivK5Ai6JTGksXGuJXOugDxGsqGGLqnrTcC86CwOgAKPuY3y58drrGGYQR3rTgb6ux-Q7fB4/s400/JC_Pink+Dogwood.jpg'); /* Set background image */
+            background-size: cover; /* Ensure the image covers the entire container */
+            background-position: center; /* Center the image */
+            border-left: 1px solid #ccc;
+            margin-top: 10vh; 
+        }
     </style>
 </head>
 <body>
@@ -38,29 +121,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZ7l7sp4voo6WjVqQR5ydiP-tf7BD50OM&callback=initMap" async defer></script>
     <!-- FullCalendar JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <!-- Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCkGIqGUxSzlPhZuXGlbgTho_4BD1Y54kA",
-            authDomain: "thrifties-325ae.firebaseapp.com",
-            projectId: "thrifties-325ae",
-            storageBucket: "thrifties-325ae.appspot.com",
-            messagingSenderId: "783907818946",
-            appId: "1:783907818946:web:85d4afc999d184fd9a5a5b",
-            measurementId: "G-VQZJTTLZ3Z"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Array to store markers and their details
-        let markers = [];
-
         // Initialize and display the map
         function initMap() {
             // Tel Aviv coordinates (latitude, longitude)
@@ -83,16 +144,10 @@
                 ]
             });
 
-            // Fetch existing markers from Firestore and display them on the map
-            db.collection("markers").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const location = new google.maps.LatLng(data.lat, data.lng);
-                    placeMarker(location, map, data.description, data.category, data.photoUrl, data.link, markers);
-                });
-            }).catch((error) => {
-                console.error("Error fetching markers: ", error);
-            });
+            // Array to store markers and their details
+            let markers = [];
+            // Array to store favorite markers
+            let favorites = [];
 
             // Add a click event listener to the map to place a marker
             map.addListener('click', function(event) {
@@ -101,23 +156,7 @@
                     const category = prompt("Optional: Enter a category for this location (leave blank to skip):");
                     const photoUrl = prompt("Optional: Enter a photo URL for this location (leave blank to skip):");
                     const link = prompt("Optional: Enter a website link for this location (leave blank to skip):");
-
-                    // Place the marker on the map
                     placeMarker(event.latLng, map, description, category, photoUrl, link, markers);
-
-                    // Save the marker to Firestore
-                    db.collection("markers").add({
-                        lat: event.latLng.lat(),
-                        lng: event.latLng.lng(),
-                        description: description,
-                        category: category,
-                        photoUrl: photoUrl,
-                        link: link
-                    }).then(() => {
-                        console.log("Marker saved to Firestore");
-                    }).catch((error) => {
-                        console.error("Error saving marker: ", error);
-                    });
                 }
             });
 
@@ -145,7 +184,7 @@
             const marker = new google.maps.Marker({
                 position: location,
                 map: map,
-                title: description
+                title: "Selected Location"
             });
 
             // Build the content for the info window
@@ -179,6 +218,9 @@
 
             // Update category filters
             updateCategoryFilters(markers);
+
+            // Optional: Log the details of the marker
+            console.log("Marker placed at:", location.lat(), location.lng(), "Description:", description, "Category:", category, "Photo URL:", photoUrl, "Link:", link);
         }
 
         // Function to add a marker to favorites
