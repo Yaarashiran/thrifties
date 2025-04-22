@@ -7,8 +7,8 @@
     <style>
         /* Set the size of the map */
         #map {
-            height: 100vh; /* Full viewport height */
-            width: 70%;   /* Adjusted to make space for the events list */
+            height: 100vh;
+            width: 70%;
         }
         body {
             margin: 0;
@@ -16,7 +16,6 @@
             font-family: Arial, sans-serif;
             display: flex;
         }
-        /* Style for the title */
         #title {
             position: absolute;
             top: 10px;
@@ -32,7 +31,6 @@
             text-align: center;
             color: black;
         }
-        /* Style for event type filter buttons */
         #event-filters {
             position: absolute;
             top: 60px;
@@ -48,33 +46,6 @@
             padding: 5px 10px;
             cursor: pointer;
         }
-        /* Style for the favorites list */
-        #favorites-list {
-            position: absolute;
-            top: 60px;
-            right: 10px;
-            z-index: 1000;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            max-width: 300px;
-            display: none;
-        }
-        #favorites-list ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        #favorites-list li {
-            margin: 5px 0;
-            padding: 5px;
-            border-bottom: 1px solid #ddd;
-        }
-        #favorites-list li:last-child {
-            border-bottom: none;
-        }
-        /* Style for the events list */
         #events-list {
             width: 30%;
             height: 100vh;
@@ -107,10 +78,11 @@
             border-radius: 20px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         #events-list li:hover {
             background-color: rgba(240, 240, 240, 0.8);
+            transform: translateY(-3px);
         }
         .event-title {
             font-weight: bold;
@@ -131,6 +103,74 @@
             font-size: 14px;
             color: #555;
         }
+        .event-image-thumb {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+        .submit-btn {
+            background-color: #2c6e49;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background-color: #1e4d32;
+        }
     </style>
 </head>
 <body>
@@ -140,6 +180,7 @@
     <!-- Event filter buttons -->
     <div id="event-filters">
         <button onclick="window.location.href='index.html'">Back</button>
+        <button onclick="openAddEventModal()">Add Event</button>
     </div>
 
     <!-- Map container -->
@@ -147,38 +188,305 @@
 
     <!-- Events list -->
     <div id="events-list">
-        <h3>Events This Week</h3>
-        <ul>
-            <li>Stay tuned for upcoming events</li>
+        <h3>Upcoming Events</h3>
+        <ul id="events-ul">
+            <!-- Events will be added here dynamically -->
         </ul>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="addEventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddEventModal()">&times;</span>
+            <h2>Add New Event</h2>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="event-title">Event Title*</label>
+                    <input type="text" id="event-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-category">Category*</label>
+                    <select id="event-category" required>
+                        <option value="">Select a category</option>
+                        <option value="Vintage Market">Vintage Market</option>
+                        <option value="Flea Market">Flea Market</option>
+                        <option value="Yard Sale">Yard Sale</option>
+                        <option value="Pop-up Shop">Pop-up Shop</option>
+                        <option value="Clothing Swap">Clothing Swap</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Date & Time*</label>
+                    <input type="text" id="event-date" placeholder="June 15, 2023 • 10AM-6PM" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Description*</label>
+                    <textarea id="event-description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-photo">Photo URL (optional)</label>
+                    <input type="text" id="event-photo" placeholder="https://example.com/photo.jpg">
+                </div>
+                <button type="button" class="submit-btn" onclick="addEvent()">Add Event</button>
+            </form>
+        </div>
     </div>
 
     <!-- Google Maps JavaScript API -->
     <script>
+        // Global variables
+        let map;
+        let markers = [];
+        let selectedLocation = null;
+        let tempMarker = null;
+
         // Initialize and display the map
         function initMap() {
             // Tel Aviv coordinates (latitude, longitude)
             const telAviv = { lat: 32.0853, lng: 34.7818 };
 
             // Create a map centered at Tel Aviv
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 13, // Zoom level (higher = more zoomed in)
-                center: telAviv, // Center the map on Tel Aviv
-                mapTypeId: 'roadmap', // Set map type to roadmap
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13,
+                center: telAviv,
+                mapTypeId: 'roadmap',
                 styles: [
-                    {
-                        featureType: "poi.business", // Hide business points of interest
-                        stylers: [{ visibility: "off" }]
-                    },
-                    {
-                        featureType: "poi", // Hide all other points of interest
-                        stylers: [{ visibility: "off" }]
-                    },
-                    {
-                        featureType: "transit", // Hide transit stations
-                        stylers: [{ visibility: "off" }]
-                    }
+                    { featureType: "poi.business", stylers: [{ visibility: "off" }] },
+                    { featureType: "poi", stylers: [{ visibility: "off" }] },
+                    { featureType: "transit", stylers: [{ visibility: "off" }] }
                 ]
+            });
+
+            // Load saved events from localStorage
+            loadSavedEvents();
+        }
+
+        // Open the add event modal
+        function openAddEventModal() {
+            document.getElementById('addEventModal').style.display = 'block';
+            
+            // Set up click listener for map to select location
+            if (window.google && window.google.maps) {
+                setupMapClickListener();
+            }
+        }
+
+        // Close the add event modal
+        function closeAddEventModal() {
+            document.getElementById('addEventModal').style.display = 'none';
+            document.getElementById('event-form').reset();
+            
+            // Remove temporary marker if exists
+            if (tempMarker) {
+                tempMarker.setMap(null);
+                tempMarker = null;
+            }
+            
+            // Reset selected location
+            selectedLocation = null;
+        }
+
+        // Set up map click listener for selecting location
+        function setupMapClickListener() {
+            // Remove any existing click listener
+            if (window.mapClickListener) {
+                google.maps.event.removeListener(window.mapClickListener);
+            }
+            
+            // Add new click listener
+            window.mapClickListener = map.addListener('click', function(event) {
+                // Remove previous temporary marker if exists
+                if (tempMarker) {
+                    tempMarker.setMap(null);
+                }
+                
+                // Add new temporary marker
+                tempMarker = new google.maps.Marker({
+                    position: event.latLng,
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+                
+                // Save the selected location
+                selectedLocation = event.latLng;
+                
+                // Center map on the selected location
+                map.panTo(event.latLng);
+            });
+        }
+
+        // Add a new event
+        function addEvent() {
+            if (!selectedLocation) {
+                alert("Please click on the map to select a location for your event.");
+                return;
+            }
+
+            const title = document.getElementById('event-title').value;
+            const category = document.getElementById('event-category').value;
+            const date = document.getElementById('event-date').value;
+            const description = document.getElementById('event-description').value;
+            const photoUrl = document.getElementById('event-photo').value;
+
+            if (!title || !category || !date || !description) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            // Create a unique ID for the event
+            const eventId = 'event-' + Date.now();
+
+            // Create the event marker
+            createEventMarker(
+                selectedLocation,
+                title,
+                category,
+                date,
+                description,
+                photoUrl,
+                eventId
+            );
+
+            // Add to events list
+            addToEventsList(
+                eventId,
+                title,
+                category,
+                date,
+                description,
+                photoUrl
+            );
+
+            // Save to localStorage
+            saveEvent({
+                id: eventId,
+                position: {
+                    lat: selectedLocation.lat(),
+                    lng: selectedLocation.lng()
+                },
+                title,
+                category,
+                date,
+                description,
+                photoUrl
+            });
+
+            // Close the modal
+            closeAddEventModal();
+        }
+
+        // Create an event marker on the map
+        function createEventMarker(location, title, category, date, description, photoUrl, eventId) {
+            const marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: title
+            });
+
+            // Build info window content
+            let infoContent = `
+                <div style="max-width: 250px;">
+                    <h3 style="margin: 0 0 10px 0; color: #2c6e49;">${title}</h3>
+                    <p style="margin: 5px 0;"><strong>Category:</strong> ${category}</p>
+                    <p style="margin: 5px 0; color: #d94f04;"><strong>When:</strong> ${date}</p>
+                    <p style="margin: 5px 0 10px 0;">${description}</p>
+            `;
+            
+            if (photoUrl) {
+                infoContent += `<img src="${photoUrl}" alt="Event Photo" style="max-width: 100%; height: auto; margin-bottom: 10px;">`;
+            }
+            
+            infoContent += `</div>`;
+
+            // Create info window
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoContent
+            });
+
+            // Add click listener to marker
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+
+            // Save marker reference
+            markers.push({
+                id: eventId,
+                marker: marker,
+                infoWindow: infoWindow
+            });
+        }
+
+        // Add event to the events list
+        function addToEventsList(eventId, title, category, date, description, photoUrl) {
+            const eventsUl = document.getElementById('events-ul');
+            const li = document.createElement('li');
+            li.setAttribute('data-id', eventId);
+            
+            let eventContent = `
+                <div class="event-title">${title}</div>
+                <div class="event-date">${date}</div>
+                <div><strong>Category:</strong> ${category}</div>
+                <div class="event-description">${description}</div>
+            `;
+            
+            if (photoUrl) {
+                eventContent = `
+                    <img src="${photoUrl}" class="event-image-thumb" alt="${title}">
+                    ${eventContent}
+                `;
+            }
+            
+            li.innerHTML = eventContent;
+            
+            // Add click handler to focus on the event
+            li.addEventListener('click', function() {
+                focusOnEvent(eventId);
+            });
+            
+            eventsUl.appendChild(li);
+        }
+
+        // Focus on a specific event
+        function focusOnEvent(eventId) {
+            const event = markers.find(m => m.id === eventId);
+            if (event) {
+                map.setZoom(16);
+                map.panTo(event.marker.getPosition());
+                event.infoWindow.open(map, event.marker);
+            }
+        }
+
+        // Save event to localStorage
+        function saveEvent(event) {
+            const events = JSON.parse(localStorage.getItem('thriftingEvents')) || [];
+            events.push(event);
+            localStorage.setItem('thriftingEvents', JSON.stringify(events));
+        }
+
+        // Load saved events from localStorage
+        function loadSavedEvents() {
+            const savedEvents = JSON.parse(localStorage.getItem('thriftingEvents')) || [];
+            
+            savedEvents.forEach(event => {
+                createEventMarker(
+                    new google.maps.LatLng(event.position.lat, event.position.lng),
+                    event.title,
+                    event.category,
+                    event.date,
+                    event.description,
+                    event.photoUrl,
+                    event.id
+                );
+                
+                addToEventsList(
+                    event.id,
+                    event.title,
+                    event.category,
+                    event.date,
+                    event.description,
+                    event.photoUrl
+                );
             });
         }
     </script>
