@@ -5,29 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thrifting Events Map</title>
     <style>
-        <style>
-    /* Modal styles */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 2000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.7);
-        overflow: auto; /* Enable scrolling if needed */
-    }
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto; /* Reduced from 10% to give more space */
-        padding: 20px;
-        border-radius: 8px;
-        width: 80%;
-        max-width: 500px;
-        max-height: 80vh; /* Limit height to 80% of viewport */
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            overflow: auto;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
         /* Set the size of the map */
         #map {
             height: 100vh;
@@ -133,25 +132,6 @@
             border-radius: 8px;
             margin-bottom: 10px;
         }
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-        }
         .close {
             color: #aaa;
             float: right;
@@ -194,6 +174,12 @@
         .submit-btn:hover {
             background-color: #1e4d32;
         }
+        #selected-location-info {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -222,6 +208,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeAddEventModal()">&times;</span>
             <h2>Add New Event</h2>
+            <div id="selected-location-info"></div>
             <form id="event-form">
                 <div class="form-group">
                     <label for="event-title">Event Title*</label>
@@ -280,13 +267,68 @@
                 ]
             });
 
+            // Add double-click listener to open add event modal
+            map.addListener('dblclick', function(event) {
+                selectedLocation = event.latLng;
+                openAddEventModalWithLocation(event.latLng);
+            });
+
             // Load saved events from localStorage
             loadSavedEvents();
+        }
+
+        // Open the add event modal with a selected location
+        function openAddEventModalWithLocation(location) {
+            document.getElementById('addEventModal').style.display = 'block';
+            
+            // Remove previous temporary marker if exists
+            if (tempMarker) {
+                tempMarker.setMap(null);
+            }
+            
+            // Add new temporary marker
+            tempMarker = new google.maps.Marker({
+                position: location,
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                }
+            });
+            
+            // Update the selected location if marker is dragged
+            tempMarker.addListener('dragend', function() {
+                selectedLocation = tempMarker.getPosition();
+                updateLocationInfo(selectedLocation);
+            });
+            
+            // Display location info
+            updateLocationInfo(location);
+        }
+
+        // Update the location information in the modal
+        function updateLocationInfo(location) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: location }, (results, status) => {
+                let address = "Selected location coordinates: " + 
+                    location.lat().toFixed(6) + ", " + location.lng().toFixed(6);
+                
+                if (status === 'OK' && results[0]) {
+                    address = results[0].formatted_address;
+                }
+                
+                document.getElementById('selected-location-info').innerHTML = `
+                    <strong>Location:</strong> ${address}
+                `;
+            });
         }
 
         // Open the add event modal
         function openAddEventModal() {
             document.getElementById('addEventModal').style.display = 'block';
+            document.getElementById('selected-location-info').innerHTML = 
+                '<em>Click on the map to select a location</em>';
             
             // Set up click listener for map to select location
             if (window.google && window.google.maps) {
@@ -298,6 +340,7 @@
         function closeAddEventModal() {
             document.getElementById('addEventModal').style.display = 'none';
             document.getElementById('event-form').reset();
+            document.getElementById('selected-location-info').innerHTML = '';
             
             // Remove temporary marker if exists
             if (tempMarker) {
@@ -318,31 +361,15 @@
             
             // Add new click listener
             window.mapClickListener = map.addListener('click', function(event) {
-                // Remove previous temporary marker if exists
-                if (tempMarker) {
-                    tempMarker.setMap(null);
-                }
-                
-                // Add new temporary marker
-                tempMarker = new google.maps.Marker({
-                    position: event.latLng,
-                    map: map,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP
-                });
-                
-                // Save the selected location
                 selectedLocation = event.latLng;
-                
-                // Center map on the selected location
-                map.panTo(event.latLng);
+                openAddEventModalWithLocation(event.latLng);
             });
         }
 
         // Add a new event
         function addEvent() {
             if (!selectedLocation) {
-                alert("Please click on the map to select a location for your event.");
+                alert("Please select a location for your event by clicking on the map.");
                 return;
             }
 
