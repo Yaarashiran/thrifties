@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Connects - Thrifters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* General Styles - Matching Thrifters Theme */
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://livinggreenwich.com/wp-content/uploads/2020/12/James-Chillington-8.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header - Matching Thrifters Style */
+        header {
+            text-align: center;
+            margin: 40px 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Main Content Container */
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        /* Button Styles - Matching Thrifters */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            color: #333;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-button i {
+            margin-right: 8px;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #syncContacts {
+            background-color: #00BFA5;
+            color: white;
+        }
+
+        #viewFriends {
+            background-color: #4285F4;
+            color: white;
+        }
+
+        /* Friends List */
+        .friends-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .friend-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .friend-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #eee;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.5em;
+        }
+
+        .friend-info h3 {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .friend-info p {
+            margin: 5px 0 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header, .content-container {
+                width: 90%;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .friends-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Connects</h1>
+        <p>Manage your Thrifters network and connections</p>
+    </header>
+    
+    <div class="content-container">
+        <div class="action-buttons">
+            <button id="syncContacts" class="action-button">
+                <i class="fas fa-sync-alt"></i>
+                Sync Contacts
+            </button>
+            
+            <button id="viewFriends" class="action-button">
+                <i class="fas fa-user-friends"></i>
+                View Friends
+            </button>
+        </div>
+        
+        <h2>Your Connections</h2>
+        <div class="friends-list">
+            <!-- Friend Card 1 -->
+            <div class="friend-card">
+                <div class="friend-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="friend-info">
+                    <h3>Alex Johnson</h3>
+                    <p>Local Thrifter • 12 mutual friends</p>
+                </div>
+            </div>
+            
+            <!-- Friend Card 2 -->
+            <div class="friend-card">
+                <div class="friend-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="friend-info">
+                    <h3>Sam Wilson</h3>
+                    <p>Vintage Collector • 8 mutual friends</p>
+                </div>
+            </div>
+            
+            <!-- Friend Card 3 -->
+            <div class="friend-card">
+                <div class="friend-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="friend-info">
+                    <h3>Taylor Smith</h3>
+                    <p>Artisan Creator • 5 mutual friends</p>
+                </div>
+            </div>
+            
+            <!-- Friend Card 4 -->
+            <div class="friend-card">
+                <div class="friend-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="friend-info">
+                    <h3>Jordan Lee</h3>
+                    <p>Service Provider • 3 mutual friends</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Button functionality
+        document.getElementById('syncContacts').addEventListener('click', function() {
+            alert('We'll search your contacts for other Thrifters users');
+            // Actual sync functionality would go here
+        });
+
+        document.getElementById('viewFriends').addEventListener('click', function() {
+            alert('Showing your complete friends list');
+            // Actual friends list functionality would go here
+        });
+        
+        // You would typically add code here to load real friend data
+    </script>
+</body>
+</html>
