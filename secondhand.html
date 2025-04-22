@@ -593,6 +593,7 @@
             // Clear existing categories
             categories.clear();
             const itemsUl = document.getElementById('items-ul');
+            itemsUl.innerHTML = '<h3>Item Categories</h3>';
             
             // First add all categories
             savedItems.forEach(item => {
