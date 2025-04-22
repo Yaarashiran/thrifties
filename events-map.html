@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thrifters Events Map</title>
+    <title>Thrifting Events Map</title>
     <style>
         /* Set the size of the map */
         #map {
@@ -13,7 +13,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif; /* Optional: Set a font */
+            font-family: Arial, sans-serif;
             display: flex;
         }
         /* Style for the title */
@@ -23,19 +23,19 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            background: rgba(255, 255, 224, 0.8); /* Light yellow with 80% opacity */
+            background: rgba(255, 255, 224, 0.8);
             padding: 10px 20px;
             border-radius: 5px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
             font-size: 24px;
             font-weight: bold;
             text-align: center;
-            color: black; /* Black text for better contrast */
+            color: black;
         }
         /* Style for event type filter buttons */
         #event-filters {
             position: absolute;
-            top: 60px; /* Adjusted to make space for the title */
+            top: 60px;
             left: 10px;
             z-index: 1000;
             background: white;
@@ -48,10 +48,6 @@
             padding: 5px 10px;
             cursor: pointer;
         }
-        /* Style for highlighted event type button */
-        #event-filters button.highlighted {
-            background-color: yellow; /* Highlight color */
-        }
         /* Style for the favorites list */
         #favorites-list {
             position: absolute;
@@ -63,7 +59,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
             max-width: 300px;
-            display: none; /* Hidden by default */
+            display: none;
         }
         #favorites-list ul {
             list-style-type: none;
@@ -80,21 +76,21 @@
         }
         /* Style for the events list */
         #events-list {
-            width: 30%; /* Adjusted to take up 30% of the page width */
+            width: 30%;
             height: 100vh;
             padding: 20px;
-            background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'); /* Background photo of a thrift event */
-            background-size: cover; /* Ensures the image covers the entire background */
-            background-position: center; /* Centers the image */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-left: 1px solid #ccc;
-            overflow-y: auto; /* Enable scrolling if content overflows */
+            overflow-y: auto;
         }
         #events-list h3 {
             margin-top: 0;
             font-size: 20px;
             color: #333;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
             text-align: center;
@@ -107,23 +103,23 @@
         #events-list li {
             margin: 10px 0;
             padding: 15px;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
-            border-radius: 20px; /* Bubble shape */
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
         #events-list li:hover {
-            background-color: rgba(240, 240, 240, 0.8); /* Hover effect with transparency */
+            background-color: rgba(240, 240, 240, 0.8);
         }
         .event-title {
             font-weight: bold;
             font-size: 18px;
             margin-bottom: 5px;
-            color: #2c6e49; /* Green color for titles */
+            color: #2c6e49;
         }
         .event-date {
-            color: #d94f04; /* Orange color for dates */
+            color: #d94f04;
             font-size: 14px;
             margin-bottom: 5px;
         }
@@ -135,30 +131,6 @@
             font-size: 14px;
             color: #555;
         }
-        /* Style for the "Upcoming Events" section */
-        #upcoming-events {
-            margin-top: 20px;
-        }
-        #upcoming-events h3 {
-            font-size: 20px;
-            color: #333;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        #upcoming-events div {
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for better readability */
-            border-radius: 20px; /* Bubble shape */
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        #upcoming-events div:hover {
-            background-color: rgba(240, 240, 240, 0.8); /* Hover effect with transparency */
-        }
     </style>
 </head>
 <body>
@@ -167,16 +139,7 @@
 
     <!-- Event filter buttons -->
     <div id="event-filters">
-        <button onclick="filterMarkers('all')">Show All</button>
-        <button onclick="toggleFavorites()">My Favorites</button>
-        <!-- Back button to return to the index page -->
         <button onclick="window.location.href='index.html'">Back</button>
-    </div>
-
-    <!-- Favorites list -->
-    <div id="favorites-list">
-        <h3>Saved Events</h3>
-        <ul id="favorites-ul"></ul>
     </div>
 
     <!-- Map container -->
@@ -186,36 +149,21 @@
     <div id="events-list">
         <h3>Events This Week</h3>
         <ul>
-"stay tuned"
+            <li>Stay tuned for upcoming events</li>
         </ul>
-
-        <!-- "Upcoming Events" section -->
-        <div id="upcoming-events">
-            <h3>Upcoming Events</h3>
-            <div onclick="showUpcomingEvents()">View All Upcoming Events</div>
-        </div>
     </div>
 
     <!-- Google Maps JavaScript API -->
     <script>
-        // Global variables
-        let map;
-        let markers = [];
-        let eventMarkers = {
-            'vintage-market': null,
-            'community-sale': null,
-            'pop-up-shop': null
-        };
-
         // Initialize and display the map
         function initMap() {
-            // Default coordinates (latitude, longitude)
-            const defaultLocation = { lat: 32.0853, lng: 34.7818 };
+            // Tel Aviv coordinates (latitude, longitude)
+            const telAviv = { lat: 32.0853, lng: 34.7818 };
 
-            // Create a map centered at default location
-            map = new google.maps.Map(document.getElementById("map"), {
+            // Create a map centered at Tel Aviv
+            const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 13, // Zoom level (higher = more zoomed in)
-                center: defaultLocation, // Center the map
+                center: telAviv, // Center the map on Tel Aviv
                 mapTypeId: 'roadmap', // Set map type to roadmap
                 styles: [
                     {
@@ -225,155 +173,18 @@
                     {
                         featureType: "poi", // Hide all other points of interest
                         stylers: [{ visibility: "off" }]
+                    },
+                    {
+                        featureType: "transit", // Hide transit stations
+                        stylers: [{ visibility: "off" }]
                     }
                 ]
             });
-
-    
-
-        // Function to add an event marker to the map
-              // Add a click event listener to the map to place a marker
-            map.addListener('click', function(event) {
-                const description = prompt("Enter a title for this location:");
-                if (description) {
-                    const category = prompt("Optional: Enter a category for this location (leave blank to skip):");
-                    const photoUrl = prompt("Optional: Enter a photo URL for this location (leave blank to skip):");
-                    const link = prompt("Optional: Enter a website link for this location (leave blank to skip):");
-                    placeMarker(event.latLng, map, description, category, photoUrl, link, markers);
-                }
-            });
-        }
-
-        // Function to place a marker at the clicked location
-        function placeMarker(location, map, description, category, photoUrl, link, markers) {
-            // Create a new marker at the clicked location
-            const marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                title: "Selected Location"
-            });
-
-            // Build the content for the info window
-            let infoContent = `<strong>Description:</strong> ${description}<br>`;
-            if (category) {
-                infoContent += `<strong>Category:</strong> ${category}<br>`;
-            }
-            if (photoUrl) {
-                infoContent += `<img src="${photoUrl}" alt="Location Photo" style="max-width: 200px; height: auto; margin-top: 10px;"><br>`;
-            }
-            if (link) {
-                infoContent += `<a href="${link}" target="_blank">Visit Website</a>`;
-            }
-
-            // Add a "Add to Favorites" button to the info window
-            infoContent += `<br><button onclick="addToFavorites('${description}')">Add to Favorites</button>`;
-
-            // Create an info window for the marker
-            const infoWindow = new google.maps.InfoWindow({
-                content: infoContent
-            });
-
-            // Add a click listener to the marker to open the info window
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-                highlightCategory(category); // Highlight the relevant category button
-            });
-
-            // Save the marker and its details to the array
-            markers.push({ marker, description, category, photoUrl, link });
-
-            // Update category filters
-            updateCategoryFilters(markers);
-
-            // Optional: Log the details of the marker
-            console.log("Marker placed at:", location.lat(), location.lng(), "Description:", description, "Category:", category, "Photo URL:", photoUrl, "Link:", link);
-        }
-
-            // Build the content for the info window
-            let infoContent = `
-                <div style="max-width: 250px;">
-                    <h3 style="margin: 0 0 10px 0; color: #2c6e49;">${title}</h3>
-                    <p style="margin: 5px 0; color: #d94f04;"><strong>When:</strong> ${date}</p>
-                    <p style="margin: 5px 0;"><strong>Where:</strong> ${locationName}</p>
-                    <p style="margin: 5px 0 10px 0;">${description}</p>
-            `;
-            
-            if (photoUrl) {
-                infoContent += `<img src="${photoUrl}" alt="Event Photo" style="max-width: 100%; height: auto; margin-bottom: 10px;">`;
-            }
-            
-            infoContent += `
-                    <button onclick="addToFavorites('${title}')" style="padding: 5px 10px; background: #2c6e49; color: white; border: none; border-radius: 3px; cursor: pointer;">Save Event</button>
-                </div>
-            `;
-
-            // Create an info window for the marker
-            const infoWindow = new google.maps.InfoWindow({
-                content: infoContent
-            });
-
-            // Add a click listener to the marker to open the info window
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });
-
-            // Save the marker to our collection
-            markers.push(marker);
-            eventMarkers[eventId] = marker;
-        }
-
-        // Function to focus on a specific event
-        function focusOnEvent(eventId) {
-            const marker = eventMarkers[eventId];
-            if (marker) {
-                map.setZoom(15);
-                map.setCenter(marker.getPosition());
-                // Simulate a click on the marker to open its info window
-                google.maps.event.trigger(marker, 'click');
-            }
-        }
-
-        // Function to add an event to favorites
-        function addToFavorites(title) {
-            const favoritesUl = document.getElementById('favorites-ul');
-            const li = document.createElement('li');
-            li.textContent = title;
-            favoritesUl.appendChild(li);
-
-            // Show the favorites list if it's hidden
-            const favoritesList = document.getElementById('favorites-list');
-            favoritesList.style.display = 'block';
-
-            console.log("Added to favorites:", title);
-        }
-
-        // Function to toggle the favorites list visibility
-        function toggleFavorites() {
-            const favoritesList = document.getElementById('favorites-list');
-            if (favoritesList.style.display === 'none' || favoritesList.style.display === '') {
-                favoritesList.style.display = 'block'; // Show the list
-            } else {
-                favoritesList.style.display = 'none'; // Hide the list
-            }
-        }
-
-        // Function to filter markers by event type
-        function filterMarkers(type) {
-            // This would be expanded to filter different types of events
-            // For now, just show all markers
-            markers.forEach(marker => {
-                marker.setVisible(true);
-            });
-        }
-
-        // Function to show upcoming events
-        function showUpcomingEvents() {
-            alert("This will show all upcoming thrifting events in your area!");
         }
     </script>
 
     <!-- Load the Google Maps API with your API key -->
-    <script async
+    <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZ7l7sp4voo6WjVqQR5ydiP-tf7BD50OM&callback=initMap">
     </script>
 </body>
