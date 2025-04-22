@@ -186,24 +186,7 @@
     <div id="events-list">
         <h3>Events This Week</h3>
         <ul>
-            <li onclick="focusOnEvent('vintage-market')">
-                <div class="event-title">Downtown Vintage Market</div>
-                <div class="event-date">June 15, 2023 • 10AM-6PM</div>
-                <div class="event-location">Main Street Square</div>
-                <div class="event-description">Annual vintage market featuring clothing, furniture, and collectibles from local vendors.</div>
-            </li>
-            <li onclick="focusOnEvent('community-sale')">
-                <div class="event-title">Community Thrift Sale</div>
-                <div class="event-date">June 17, 2023 • 8AM-2PM</div>
-                <div class="event-location">Riverside Park</div>
-                <div class="event-description">Neighborhood-wide sale with over 100 participating households. Great for bargain hunters!</div>
-            </li>
-            <li onclick="focusOnEvent('pop-up-shop')">
-                <div class="event-title">Thrift Pop-up Shop</div>
-                <div class="event-date">June 18-20, 2023 • 11AM-7PM</div>
-                <div class="event-location">The Warehouse District</div>
-                <div class="event-description">Three-day pop-up event featuring curated secondhand fashion from local thrift influencers.</div>
-            </li>
+"stay tuned"
         </ul>
 
         <!-- "Upcoming Events" section -->
@@ -246,16 +229,7 @@
                 ]
             });
 
-            // Add sample event markers
-            addEventMarker(
-                { lat: 32.0800, lng: 34.7700 }, 
-                "Downtown Vintage Market", 
-                "June 15, 2023 • 10AM-6PM", 
-                "Main Street Square", 
-                "Annual vintage market featuring clothing, furniture, and collectibles from local vendors.",
-                "vintage-market",
-                "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-            );
+        
 
             addEventMarker(
                 { lat: 32.0900, lng: 34.7900 }, 
@@ -279,13 +253,62 @@
         }
 
         // Function to add an event marker
-        function addEventMarker(location, title, date, locationName, description, eventId, photoUrl) {
-            // Create a new marker at the specified location
+              // Add a click event listener to the map to place a marker
+            map.addListener('click', function(event) {
+                const description = prompt("Enter a title for this location:");
+                if (description) {
+                    const category = prompt("Optional: Enter a category for this location (leave blank to skip):");
+                    const photoUrl = prompt("Optional: Enter a photo URL for this location (leave blank to skip):");
+                    const link = prompt("Optional: Enter a website link for this location (leave blank to skip):");
+                    placeMarker(event.latLng, map, description, category, photoUrl, link, markers);
+                }
+            });
+        }
+
+        // Function to place a marker at the clicked location
+        function placeMarker(location, map, description, category, photoUrl, link, markers) {
+            // Create a new marker at the clicked location
             const marker = new google.maps.Marker({
                 position: location,
                 map: map,
-                title: title
+                title: "Selected Location"
             });
+
+            // Build the content for the info window
+            let infoContent = `<strong>Description:</strong> ${description}<br>`;
+            if (category) {
+                infoContent += `<strong>Category:</strong> ${category}<br>`;
+            }
+            if (photoUrl) {
+                infoContent += `<img src="${photoUrl}" alt="Location Photo" style="max-width: 200px; height: auto; margin-top: 10px;"><br>`;
+            }
+            if (link) {
+                infoContent += `<a href="${link}" target="_blank">Visit Website</a>`;
+            }
+
+            // Add a "Add to Favorites" button to the info window
+            infoContent += `<br><button onclick="addToFavorites('${description}')">Add to Favorites</button>`;
+
+            // Create an info window for the marker
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoContent
+            });
+
+            // Add a click listener to the marker to open the info window
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+                highlightCategory(category); // Highlight the relevant category button
+            });
+
+            // Save the marker and its details to the array
+            markers.push({ marker, description, category, photoUrl, link });
+
+            // Update category filters
+            updateCategoryFilters(markers);
+
+            // Optional: Log the details of the marker
+            console.log("Marker placed at:", location.lat(), location.lng(), "Description:", description, "Category:", category, "Photo URL:", photoUrl, "Link:", link);
+        }
 
             // Build the content for the info window
             let infoContent = `
