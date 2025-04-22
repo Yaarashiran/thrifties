@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thrifting Events Map</title>
+    <title>Event Map</title>
     <style>
         /* Modal styles */
         .modal {
@@ -37,10 +37,11 @@
             padding: 0;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
         }
         #title {
             position: absolute;
-            top: 10px;
+            top: 60px; /* Moved down to make space for category filters */
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
@@ -53,9 +54,39 @@
             text-align: center;
             color: black;
         }
+        #category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+        }
+        #category-filters button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        #category-filters button:hover {
+            background-color: #2c6e49;
+            color: white;
+        }
+        #category-filters button.active {
+            background-color: #2c6e49;
+            color: white;
+        }
         #event-filters {
             position: absolute;
-            top: 60px;
+            top: 120px; /* Adjusted to be below title */
             left: 10px;
             z-index: 1000;
             background: white;
@@ -183,6 +214,18 @@
     </style>
 </head>
 <body>
+    <!-- Category filter buttons at the very top -->
+    <div id="category-filters">
+        <button onclick="filterEvents('music')">Music</button>
+        <button onclick="filterEvents('parties')">Parties</button>
+        <button onclick="filterEvents('hobbies')">Hobbies</button>
+        <button onclick="filterEvents('garage sales')">Garage Sales</button>
+        <button onclick="filterEvents('talks')">Talks</button>
+        <button onclick="filterEvents('english speaking')">English Speaking</button>
+        <button onclick="filterEvents('art')">Art</button>
+        <button onclick="resetFilters()">Show All</button>
+    </div>
+
     <!-- Title at the top middle of the page -->
     <div id="title">Thrifting Events Map</div>
 
@@ -208,6 +251,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeAddEventModal()">&times;</span>
             <h2>Add An Event</h2>
+            <div id="selected-location-info"></div>
             <form id="event-form">
                 <div class="form-group">
                     <label for="event-title">Event Title*</label>
@@ -222,6 +266,13 @@
                         <option value="Yard Sale">Yard Sale</option>
                         <option value="Pop-up Shop">Pop-up Shop</option>
                         <option value="Clothing Swap">Clothing Swap</option>
+                        <option value="Music">Music</option>
+                        <option value="Parties">Parties</option>
+                        <option value="Hobbies">Hobbies</option>
+                        <option value="Garage Sales">Garage Sales</option>
+                        <option value="Talks">Talks</option>
+                        <option value="English Speaking">English Speaking</option>
+                        <option value="Art">Art</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -248,6 +299,7 @@
         let markers = [];
         let selectedLocation = null;
         let tempMarker = null;
+        let currentFilter = null;
 
         // Initialize and display the map
         function initMap() {
@@ -273,6 +325,66 @@
             });
 
             // Load saved events from localStorage
+            loadSavedEvents();
+        }
+
+        // Filter events by category
+        function filterEvents(category) {
+            currentFilter = category.toLowerCase();
+            
+            // Highlight the active filter button
+            const buttons = document.querySelectorAll('#category-filters button');
+            buttons.forEach(button => {
+                if (button.textContent.toLowerCase() === currentFilter) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Clear current display
+            document.getElementById('events-ul').innerHTML = '';
+            markers.forEach(marker => marker.marker.setMap(null));
+            markers = [];
+            
+            // Load and display only filtered events
+            const savedEvents = JSON.parse(localStorage.getItem('thriftingEvents')) || [];
+            const filteredEvents = savedEvents.filter(event => 
+                event.category.toLowerCase().includes(currentFilter)
+            );
+            
+            filteredEvents.forEach(event => {
+                createEventMarker(
+                    new google.maps.LatLng(event.position.lat, event.position.lng),
+                    event.title,
+                    event.category,
+                    event.date,
+                    event.description,
+                    event.photoUrl,
+                    event.id
+                );
+                
+                addToEventsList(
+                    event.id,
+                    event.title,
+                    event.category,
+                    event.date,
+                    event.description,
+                    event.photoUrl
+                );
+            });
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            currentFilter = null;
+            
+            // Remove active class from all filter buttons
+            document.querySelectorAll('#category-filters button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Reload all events
             loadSavedEvents();
         }
 
@@ -515,6 +627,11 @@
         // Load saved events from localStorage
         function loadSavedEvents() {
             const savedEvents = JSON.parse(localStorage.getItem('thriftingEvents')) || [];
+            
+            // Clear current display
+            document.getElementById('events-ul').innerHTML = '';
+            markers.forEach(marker => marker.marker.setMap(null));
+            markers = [];
             
             savedEvents.forEach(event => {
                 createEventMarker(
