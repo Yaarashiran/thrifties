@@ -29,7 +29,7 @@
         }
         /* Set the size of the map */
         #map {
-            height: 60vh; /* Reduced height to make space */
+            height: 90vh; /* Increased height to cover more vertical space */
             width: 70%;
         }
         body {
@@ -38,10 +38,11 @@
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
+            height: 100vh;
         }
         #title {
             position: absolute;
-            top: 60px; /* Positioned below category filters */
+            top: 60px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
@@ -84,7 +85,7 @@
         }
         #event-filters {
             position: absolute;
-            top: 120px; /* Below title */
+            top: 120px;
             left: 10px;
             z-index: 1000;
             background: white;
@@ -99,7 +100,8 @@
         }
         #main-content {
             display: flex;
-            height: calc(100vh - 60px); /* Account for category filters */
+            flex: 1;
+            height: calc(100vh - 60px);
         }
         #events-list {
             width: 30%;
