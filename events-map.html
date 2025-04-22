@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Map</title>
+    <title>Events</title>
     <style>
         /* Modal styles */
         .modal {
@@ -18,7 +18,7 @@
             overflow: auto;
         }
         .modal-content {
-            background-: #fefefe;
+            background-color: #fefefe;
             margin: 5% auto;
             padding: 20px;
             border-radius: 8px;
@@ -29,7 +29,7 @@
         }
         /* Set the size of the map */
         #map {
-            height: 100vh;
+            height: 60vh; /* Reduced height to make space */
             width: 70%;
         }
         body {
@@ -41,7 +41,7 @@
         }
         #title {
             position: absolute;
-            top: 60px; /* Moved down to make space for category filters */
+            top: 60px; /* Positioned below category filters */
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
@@ -62,10 +62,8 @@
             background: white;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            position: absolute;
-            top: 10px;
-            left: 0;
-            right: 0;
+            position: sticky;
+            top: 0;
         }
         #category-filters button {
             margin: 5px;
@@ -86,7 +84,7 @@
         }
         #event-filters {
             position: absolute;
-            top: 120px; /* Adjusted to be below title */
+            top: 120px; /* Below title */
             left: 10px;
             z-index: 1000;
             background: white;
@@ -99,9 +97,13 @@
             padding: 5px 10px;
             cursor: pointer;
         }
+        #main-content {
+            display: flex;
+            height: calc(100vh - 60px); /* Account for category filters */
+        }
         #events-list {
             width: 30%;
-            height: 100vh;
+            height: 100%;
             padding: 20px;
             background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');
             background-size: cover;
@@ -227,7 +229,7 @@
     </div>
 
     <!-- Title at the top middle of the page -->
-    <div id="title">Events Map</div>
+    <div id="title">Events</div>
 
     <!-- Event filter buttons -->
     <div id="event-filters">
@@ -235,15 +237,18 @@
         <button onclick="openAddEventModal()">Add Event</button>
     </div>
 
-    <!-- Map container -->
-    <div id="map"></div>
+    <!-- Main content area -->
+    <div id="main-content">
+        <!-- Map container -->
+        <div id="map"></div>
 
-    <!-- Events list -->
-    <div id="events-list">
-        <h3>Upcoming Events</h3>
-        <ul id="events-ul">
-            <!-- Events will be added here dynamically -->
-        </ul>
+        <!-- Events list -->
+        <div id="events-list">
+            <h3>Upcoming Events</h3>
+            <ul id="events-ul">
+                <!-- Events will be added here dynamically -->
+            </ul>
+        </div>
     </div>
 
     <!-- Add Event Modal -->
