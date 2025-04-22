@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thrifting Second Hand Map</title>
+    <title>Second Hand Items Map</title>
     <style>
         /* Modal styles */
         .modal {
@@ -53,7 +53,7 @@
             text-align: center;
             color: black;
         }
-        #secondhand-filters {
+        #item-filters {
             position: absolute;
             top: 60px;
             left: 10px;
@@ -63,12 +63,12 @@
             border-radius: 5px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
-        #secondhand-filters button {
+        #item-filters button {
             margin: 5px;
             padding: 5px 10px;
             cursor: pointer;
         }
-        #secondhand-list {
+        #items-list {
             width: 30%;
             height: 100vh;
             padding: 20px;
@@ -79,7 +79,7 @@
             border-left: 1px solid #ccc;
             overflow-y: auto;
         }
-        #secondhand-list h3 {
+        #items-list h3 {
             margin-top: 0;
             font-size: 20px;
             color: #333;
@@ -88,12 +88,12 @@
             border-radius: 5px;
             text-align: center;
         }
-        #events-list ul {
+        #items-list ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
-        #secondhand-list li {
+        #items-list li {
             margin: 10px 0;
             padding: 15px;
             background-color: rgba(255, 255, 255, 0.8);
@@ -102,35 +102,41 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        #secondhand-list li:hover {
+        #items-list li:hover {
             background-color: rgba(240, 240, 240, 0.8);
             transform: translateY(-3px);
         }
-        .secondhand-title {
+        .item-title {
             font-weight: bold;
             font-size: 18px;
             margin-bottom: 5px;
             color: #2c6e49;
         }
-        .event-date {
+        .item-price {
             color: #d94f04;
             font-size: 14px;
             margin-bottom: 5px;
         }
-        .secondhand-location {
+        .item-location {
             font-size: 14px;
             margin-bottom: 5px;
         }
-        .secondhand-description {
+        .item-description {
             font-size: 14px;
             color: #555;
         }
-        .secondhand-image-thumb {
+        .item-image-thumb {
             width: 100%;
             height: 120px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
+        }
+        .category-item {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            text-align: center;
+            font-weight: bold;
+            color: #2c6e49;
         }
         .close {
             color: #aaa;
@@ -184,58 +190,62 @@
 </head>
 <body>
     <!-- Title at the top middle of the page -->
-    <div id="title">Thrifting Second Hand Map</div>
+    <div id="title">Second Hand Items Map</div>
 
-    <!-- Event filter buttons -->
-    <div id="secondhand-filters">
+    <!-- Item filter buttons -->
+    <div id="item-filters">
         <button onclick="window.location.href='index.html'">Back</button>
+        <button onclick="openAddItemModal()">Add Item</button>
     </div>
 
     <!-- Map container -->
     <div id="map"></div>
 
-    <!-- Second Hand list -->
-    <div id="secondhand-list">
-        <h3>Categories</h3>
-        <ul id="secondhand-ul">
-            <!-- categories will be added here dynamically -->
+    <!-- Items list -->
+    <div id="items-list">
+        <h3>Item Categories</h3>
+        <ul id="items-ul">
+            <!-- Categories and items will be added here dynamically -->
         </ul>
     </div>
 
-    <!-- Add Secondhand Modal -->
-    <div id="addSecondhandModal" class="modal">
+    <!-- Add Item Modal -->
+    <div id="addItemModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeaddSecondhandModal()">&times;</span>
-            <h2>Add An Event</h2>
-            <form id="secondhand-form">
+            <span class="close" onclick="closeAddItemModal()">&times;</span>
+            <h2>Add An Item</h2>
+            <div id="selected-location-info"></div>
+            <form id="item-form">
                 <div class="form-group">
-                    <label for="secondhand-title">Item Title*</label>
-                    <input type="text" id="secondhand-title" required>
+                    <label for="item-title">Item Title*</label>
+                    <input type="text" id="item-title" required>
                 </div>
                 <div class="form-group">
-                    <label for="secondhand-category">Category*</label>
-                    <select id="event-category" required>
+                    <label for="item-category">Category*</label>
+                    <select id="item-category" required>
                         <option value="">Select a category</option>
-                        <option value="Vintage Market">Vintage Market</option>
-                        <option value="Flea Market">Flea Market</option>
-                        <option value="Yard Sale">Yard Sale</option>
-                        <option value="Pop-up Shop">Pop-up Shop</option>
-                        <option value="Clothing Swap">Clothing Swap</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Books">Books</option>
+                        <option value="Home Decor">Home Decor</option>
+                        <option value="Toys">Toys</option>
+                        <option value="Sports Equipment">Sports Equipment</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="event-date">Date & Time*</label>
-                    <input type="text" id="event-date" placeholder="June 15, 2023 • 10AM-6PM" required>
+                    <label for="item-price">Price*</label>
+                    <input type="text" id="item-price" placeholder="e.g. $20 or Free" required>
                 </div>
                 <div class="form-group">
-                    <label for="event-description">Description*</label>
-                    <textarea id="event-description" required></textarea>
+                    <label for="item-description">Description*</label>
+                    <textarea id="item-description" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="event-photo">Photo URL (optional)</label>
-                    <input type="text" id="event-photo" placeholder="https://example.com/photo.jpg">
+                    <label for="item-photo">Photo URL (optional)</label>
+                    <input type="text" id="item-photo" placeholder="https://example.com/photo.jpg">
                 </div>
-                <button type="button" class="submit-btn" onclick="addEvent()">Add Event</button>
+                <button type="button" class="submit-btn" onclick="addItem()">Add Item</button>
             </form>
         </div>
     </div>
@@ -247,6 +257,7 @@
         let markers = [];
         let selectedLocation = null;
         let tempMarker = null;
+        let categories = new Set(); // To track unique categories
 
         // Initialize and display the map
         function initMap() {
@@ -265,19 +276,19 @@
                 ]
             });
 
-            // Add double-click listener to open add event modal
+            // Add double-click listener to open add item modal
             map.addListener('dblclick', function(event) {
-                selectedLocation = secondhand.latLng;
-                openAddSecondhandModalWithLocation(secondhand.latLng);
+                selectedLocation = event.latLng;
+                openAddItemModalWithLocation(event.latLng);
             });
 
-            // Load saved events from localStorage
-            loadSavedSecondhand();
+            // Load saved items from localStorage
+            loadSavedItems();
         }
 
-        // Open the add event modal with a selected location
-        function openAddSecondhandModalWithLocation(location) {
-            document.getElementById('addEventModal').style.display = 'block';
+        // Open the add item modal with a selected location
+        function openAddItemModalWithLocation(location) {
+            document.getElementById('addItemModal').style.display = 'block';
             
             // Remove previous temporary marker if exists
             if (tempMarker) {
@@ -321,9 +332,9 @@
             });
         }
 
-        // Open the add secondhand modal
-        function openAddSecondhandModal() {
-            document.getElementById('addSecondhandModal').style.display = 'block';
+        // Open the add item modal
+        function openAddItemModal() {
+            document.getElementById('addItemModal').style.display = 'block';
             document.getElementById('selected-location-info').innerHTML = 
                 '<em>Click on the map to select a location</em>';
             
@@ -333,10 +344,10 @@
             }
         }
 
-        // Close the add secondhand modal
-        function closeAddSecondhandModal() {
-            document.getElementById('addSecondhandModal').style.display = 'none';
-            document.getElementById('secondhand-form').reset();
+        // Close the add item modal
+        function closeAddItemModal() {
+            document.getElementById('addItemModal').style.display = 'none';
+            document.getElementById('item-form').reset();
             document.getElementById('selected-location-info').innerHTML = '';
             
             // Remove temporary marker if exists
@@ -353,77 +364,142 @@
         function setupMapClickListener() {
             // Remove any existing click listener
             if (window.mapClickListener) {
-                google.maps.secondhand.removeListener(window.mapClickListener);
+                google.maps.event.removeListener(window.mapClickListener);
             }
             
             // Add new click listener
-            window.mapClickListener = map.addListener('click', function(secondhand) {
-                selectedLocation = secondhand.latLng;
-                openAddSecondhandModalWithLocation(secondhand.latLng);
+            window.mapClickListener = map.addListener('click', function(event) {
+                selectedLocation = event.latLng;
+                openAddItemModalWithLocation(event.latLng);
             });
         }
 
-        // Add a new second hand item
-        function addsecondhand() {
+        // Add a category to the list
+        function addCategoryToList(category) {
+            if (categories.has(category)) return; // Skip if category already exists
+            
+            categories.add(category);
+            const itemsUl = document.getElementById('items-ul');
+            const li = document.createElement('li');
+            li.className = 'category-item';
+            li.setAttribute('data-category', category);
+            li.innerHTML = category;
+            
+            // Add click handler to filter by category
+            li.addEventListener('click', function() {
+                filterByCategory(category);
+            });
+            
+            // Add the category at the top of the list
+            if (itemsUl.firstChild) {
+                itemsUl.insertBefore(li, itemsUl.firstChild);
+            } else {
+                itemsUl.appendChild(li);
+            }
+        }
+
+        // Filter items by category
+        function filterByCategory(category) {
+            const items = JSON.parse(localStorage.getItem('secondHandItems')) || [];
+            const filteredItems = items.filter(item => item.category === category);
+            
+            // Clear the current display
+            const itemsUl = document.getElementById('items-ul');
+            itemsUl.innerHTML = '';
+            
+            // Re-add the category header
+            const li = document.createElement('li');
+            li.className = 'category-item';
+            li.innerHTML = `Showing: ${category} <button onclick="resetCategoryFilter()">Show All</button>`;
+            itemsUl.appendChild(li);
+            
+            // Add the filtered items
+            filteredItems.forEach(item => {
+                addToItemsList(
+                    item.id,
+                    item.title,
+                    item.category,
+                    item.price,
+                    item.description,
+                    item.photoUrl,
+                    false // Don't add category header
+                );
+            });
+        }
+
+        // Reset category filter
+        function resetCategoryFilter() {
+            const itemsUl = document.getElementById('items-ul');
+            itemsUl.innerHTML = '';
+            loadSavedItems(); // Reload all items and categories
+        }
+
+        // Add a new item
+        function addItem() {
             if (!selectedLocation) {
-                alert("Please select a location for your second hand item by clicking on the map.");
+                alert("Please select a location for your item by clicking on the map.");
                 return;
             }
 
-            const title = document.getElementById('secondhand-title').value;
-            const category = document.getElementById('secondhand-category').value;
-            const description = document.getElementById('secondhand-description').value;
-            const photoUrl = document.getElementById('secondhand-photo').value;
+            const title = document.getElementById('item-title').value;
+            const category = document.getElementById('item-category').value;
+            const price = document.getElementById('item-price').value;
+            const description = document.getElementById('item-description').value;
+            const photoUrl = document.getElementById('item-photo').value;
 
-            if (!title || !category || !date || !description) {
+            if (!title || !category || !price || !description) {
                 alert("Please fill in all required fields.");
                 return;
             }
 
-            // Create a unique ID for the second hand
-            const secondhandId = 'secondhand-' + Date.now();
+            // Create a unique ID for the item
+            const itemId = 'item-' + Date.now();
 
-            // Create the second hand marker
-            createsecondhandMarker(
+            // Create the item marker
+            createItemMarker(
                 selectedLocation,
                 title,
                 category,
-                date,
+                price,
                 description,
                 photoUrl,
-                secondhandId
+                itemId
             );
 
-            // Add to second hands list
-            addTosecondhandList(
-                secondhandId,
+            // Add to items list
+            addToItemsList(
+                itemId,
                 title,
                 category,
-                date,
+                price,
                 description,
-                photoUrl
+                photoUrl,
+                true // Add category header
             );
 
+            // Add the category to our categories list
+            addCategoryToList(category);
+
             // Save to localStorage
-            savesecondhand({
-                id: secondhandId,
+            saveItem({
+                id: itemId,
                 position: {
                     lat: selectedLocation.lat(),
                     lng: selectedLocation.lng()
                 },
                 title,
                 category,
-                date,
+                price,
                 description,
                 photoUrl
             });
 
             // Close the modal
-            closeAddSecondhandModal();
+            closeAddItemModal();
         }
 
-        // Create an secondhand marker on the map
-        function createsecondhandMarker(location, title, category, description, photoUrl, secondhandId) {
+        // Create an item marker on the map
+        function createItemMarker(location, title, category, price, description, photoUrl, itemId) {
             const marker = new google.maps.Marker({
                 position: location,
                 map: map,
@@ -435,12 +511,12 @@
                 <div style="max-width: 250px;">
                     <h3 style="margin: 0 0 10px 0; color: #2c6e49;">${title}</h3>
                     <p style="margin: 5px 0;"><strong>Category:</strong> ${category}</p>
-                    <p style="margin: 5px 0; color: #d94f04;"><strong>When:</strong> ${date}</p>
+                    <p style="margin: 5px 0; color: #d94f04;"><strong>Price:</strong> ${price}</p>
                     <p style="margin: 5px 0 10px 0;">${description}</p>
             `;
             
             if (photoUrl) {
-                infoContent += `<img src="${photoUrl}" alt="secondhand Photo" style="max-width: 100%; height: auto; margin-bottom: 10px;">`;
+                infoContent += `<img src="${photoUrl}" alt="Item Photo" style="max-width: 100%; height: auto; margin-bottom: 10px;">`;
             }
             
             infoContent += `</div>`;
@@ -457,79 +533,87 @@
 
             // Save marker reference
             markers.push({
-                id: secondhandId,
+                id: itemId,
                 marker: marker,
                 infoWindow: infoWindow
             });
         }
 
-        // Add second hand to the second hands list
-        function addTosecondhandList(secondhandId, title, category, date, description, photoUrl) {
-            const secondhandUl = document.getElementById('secondhand-ul');
+        // Add item to the items list
+        function addToItemsList(itemId, title, category, price, description, photoUrl, addCategoryHeader = true) {
+            const itemsUl = document.getElementById('items-ul');
             const li = document.createElement('li');
-            li.setAttribute('data-id', secondhandId);
+            li.setAttribute('data-id', itemId);
             
-            let secondhandContent = `
-                <div class="secondhand-title">${title}</div>
+            let itemContent = `
+                <div class="item-title">${title}</div>
+                <div class="item-price">${price}</div>
                 <div><strong>Category:</strong> ${category}</div>
-                <div class="secondhand-description">${description}</div>
+                <div class="item-description">${description}</div>
             `;
             
             if (photoUrl) {
-                secondhandContent = `
-                    <img src="${photoUrl}" class="secondhand-image-thumb" alt="${title}">
-                    ${secondhandContent}
+                itemContent = `
+                    <img src="${photoUrl}" class="item-image-thumb" alt="${title}">
+                    ${itemContent}
                 `;
             }
             
-            li.innerHTML = secondhandontent;
+            li.innerHTML = itemContent;
             
-            // Add click handler to focus on the secondhand
-            li.addsecondhandListener('click', function() {
-                focusOnsecondhand(secondhandId);
+            // Add click handler to focus on the item
+            li.addEventListener('click', function() {
+                focusOnItem(itemId);
             });
             
-            secondhandUl.appendChild(li);
+            itemsUl.appendChild(li);
         }
 
-        // Focus on a specific second hand
-        function focusOnsecondhan(secondhandId) {
-            const secondhand = markers.find(m => m.id === secondhandId);
-            if (secondhand) {
+        // Focus on a specific item
+        function focusOnItem(itemId) {
+            const item = markers.find(m => m.id === itemId);
+            if (item) {
                 map.setZoom(16);
-                map.panTo(secondhand.marker.getPosition());
-                secondhand.infoWindow.open(map, secondhand.marker);
+                map.panTo(item.marker.getPosition());
+                item.infoWindow.open(map, item.marker);
             }
         }
 
-        // Save secondhand to localStorage
-        function savesecondhand(secondhand) {
-            const secondhand = JSON.parse(localStorage.getItem('thriftingsecondhand')) || [];
-            secondhand.push(secondhand);
-            localStorage.setItem('thriftingsecondhand', JSON.stringify(secondhand));
+        // Save item to localStorage
+        function saveItem(item) {
+            const items = JSON.parse(localStorage.getItem('secondHandItems')) || [];
+            items.push(item);
+            localStorage.setItem('secondHandItems', JSON.stringify(items));
         }
 
-        // Load saved events from localStorage
-        function loadSavedEvents() {
-            const savedEvents = JSON.parse(localStorage.getItem('thriftingEvents')) || [];
+        // Load saved items from localStorage
+        function loadSavedItems() {
+            const savedItems = JSON.parse(localStorage.getItem('secondHandItems')) || [];
             
-            savedsecondhand.forEach(secondhand => {
-                createsecondhandMarker(
-                    new google.maps.LatLng(secondhand.position.lat, secondhand.position.lng),
-                    secondhand.title,
-                    secondhand.category,
-                    secondhand.description,
-                    secondhand.photoUrl,
-                    secondhand.id
+            // Clear existing categories
+            categories.clear();
+            const itemsUl = document.getElementById('items-ul');
+            
+            // First add all categories
+            savedItems.forEach(item => {
+                if (!categories.has(item.category)) {
+                    addCategoryToList(item.category);
+                }
+            });
+            
+            // Then add all items
+            savedItems.forEach(item => {
+                createItemMarker(
+                    new google.maps.LatLng(item.position.lat, item.position.lng),
+                    item.title,
+                    item.category,
+                    item.price,
+                    item.description,
+                    item.photoUrl,
+                    item.id
                 );
                 
-                addTosecondhandList(
-                    secondhand.id,
-                    secondhand.title,
-                    secondhand.category,
-                    secondhand.description,
-                    secondhand.photoUrl
-                );
+                // Don't add items to the list by default - they'll show when category is clicked
             });
         }
     </script>
