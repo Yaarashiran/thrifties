@@ -32,10 +32,10 @@
             font-family: 'Raleway', sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://livinggreenwich.com/wp-content/uploads/2020/12/James-Chillington-8.jpg'); /* Set background image */
-            background-size: cover; /* Ensure the image covers the entire background */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent the image from repeating */
+            background-image: url('https://livinggreenwich.com/wp-content/uploads/2020/12/James-Chillington-8.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -48,6 +48,7 @@
         header {
             text-align: center;
             margin-bottom: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 20px 30px;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -73,21 +74,17 @@
             gap: 20px;
             max-width: 800px;
             width: 100%;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
             margin-bottom: 20px;
         }
 
         /* Account Button Container */
         .account-button-container {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             max-width: 800px;
             width: 100%;
-            padding: 15px 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
             justify-content: center;
         }
 
@@ -97,45 +94,49 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background-color: #fff;
             color: #333;
             text-decoration: none;
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 500;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 120px;
         }
 
         .account-button {
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #fff;
             color: #333;
             text-decoration: none;
-            font-size: 0.9em;
+            font-size: 0.85em;
             font-weight: 500;
-            padding: 12px 20px;
-            border-radius: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .button i, .account-button i {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #00BFA5; /* Accent color for icons */
+        .button i {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+            color: #00BFA5;
         }
 
         .account-button i {
-            font-size: 1.5em;
-            margin-right: 8px;
+            font-size: 1.2em;
+            margin-right: 6px;
             margin-bottom: 0;
+            color: #00BFA5;
         }
 
         .button:hover, .account-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* Responsive Design */
@@ -154,25 +155,29 @@
             }
 
             .button {
-                padding: 15px;
-                font-size: 1em;
+                padding: 12px 8px;
+                font-size: 0.95em;
             }
 
             .account-button-container {
                 flex-direction: column;
                 align-items: center;
-                gap: 15px;
+                gap: 12px;
             }
 
             .account-button {
-                width: 100%;
-                padding: 12px;
+                width: 140px;
+                padding: 8px 12px;
             }
         }
 
         @media (max-width: 480px) {
             .main-button-container {
                 grid-template-columns: 1fr;
+            }
+            
+            .button {
+                min-width: auto;
             }
         }
     </style>
