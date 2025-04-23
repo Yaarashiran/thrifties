@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>services map</title>
+    <style>
+        /* Set the size of the map */
+        #map {
+            height: 100vh; /* Full viewport height */
+            width: 70%;   /* Adjusted to make space for the bubble list */
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif; /* Optional: Set a font */
+            display: flex;
+        }
+        /* Style for the title */
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 224, 0.8); /* Light yellow with 80% opacity */
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: black; /* Black text for better contrast */
+        }
+        /* Style for category filter buttons */
+        #category-filters {
+            position: absolute;
+            top: 60px; /* Adjusted to make space for the title */
+            left: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        #category-filters button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        /* Style for highlighted category button */
+        #category-filters button.highlighted {
+            background-color: yellow; /* Highlight color */
+        }
+        /* Style for the favorites list */
+        #favorites-list {
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            display: none; /* Hidden by default */
+        }
+        #favorites-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #favorites-list li {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        #favorites-list li:last-child {
+            border-bottom: none;
+        }
+        /* Style for the bubble list */
+        #bubble-list {
+            width: 30%; /* Adjusted to take up 30% of the page width */
+            height: 100vh;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #ccc;
+            overflow-y: auto; /* Enable scrolling if content overflows */
+        }
+        #bubble-list h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+        }
+        #bubble-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #bubble-list li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 20px; /* Bubble shape */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #bubble-list li:hover {
+            background-color: #f0f0f0; /* Hover effect */
+        }
+        /* Style for "The Daily Popular" section */
+        #daily-popular {
+            margin-top: 20px;
+        }
+        #daily-popular h3 {
+            font-size: 20px;
+            color: #333;
+        }
+        #daily-popular ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #daily-popular li {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 10px; /* Square shape with rounded corners */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #daily-popular li:hover {
+            background-color: #f0f0f0; /* Hover effect */
+        }
+    </style>
+</head>
+<body>
+    <!-- Title at the top middle of the page -->
+    <div id="title">Services Map</div>
+
+    <!-- Category filter buttons -->
+    <div id="category-filters">
+        <button onclick="filterMarkers('all')">Show All</button>
+        <button onclick="toggleFavorites()">My Favorites</button>
+        <!-- Back button to return to the index page -->
+        <button onclick="window.location.href='index.html'">Back</button>
+    </div>
+
+    <!-- Favorites list -->
+    <div id="favorites-list">
+        <h3>My Favorites</h3>
+        <ul id="favorites-ul"></ul>
+    </div>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <!-- Bubble list -->
+    <div id="bubble-list">
+        <h3>Discover the Art You're Looking For</h3>
+        <ul>
+            <li onclick="filterMarkers('read')">Read</li>
+            <li onclick="filterMarkers('visual')">Visual</li>
+            <li onclick="filterMarkers('jewelry')">Jewelry</li>
+            <li onclick="filterMarkers('accessories')">Accessories</li>
+            <li onclick="filterMarkers('wood')">Wood</li>
+        </ul>
+
+        <!-- "The Daily Popular" section -->
+        <div id="daily-popular">
+            <h3>The Daily Popular</h3>
+            <ul>
+                <li onclick="showPopularservices('babysitting')">babysitting</li>
+                <li onclick="showPopularservices('tutors')">tutors</li>
+                <li onclick="showPopularservices('graphicdesigners')">graphic designerss</li>
+                <li onclick="showPopularservices('food')">home cooked meals</li>
+                <li onclick="showPopularservices('Photographers')">Photographers</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Google Maps JavaScript API -->
+    <script>
+        // Initialize and display the map
+        function initMap() {
+            // Tel Aviv coordinates (latitude, longitude)
+            const telAviv = { lat: 32.0853, lng: 34.7818 };
+
+            // Create a map centered at Tel Aviv
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13, // Zoom level (higher = more zoomed in)
+                center: telAviv, // Center the map on Tel Aviv
+                mapTypeId: 'roadmap', // Set map type to roadmap
+                styles: [
+                    {
+                        featureType: "poi.business", // Hide business points of interest
+                        stylers: [{ visibility: "off" }]
+                    },
+                    {
+                        featureType: "poi", // Hide all other points of interest
+                        stylers: [{ visibility: "off" }]
+                    }
+                ]
+            });
+
+            // Array to store markers and their details
+            let markers = [];
+            // Array to store favorite markers
+            let favorites = [];
+
+            // Add a click event listener to the map to place a marker
+            map.addListener('click', function(event) {
+                const description = prompt("Enter a title for this location:");
+                if (description) {
+                    const category = prompt("Optional: Enter a category for this location (leave blank to skip):");
+                    const photoUrl = prompt("Optional: Enter a photo URL for this location (leave blank to skip):");
+                    const link = prompt("Optional: Enter a website link for this location (leave blank to skip):");
+                    placeMarker(event.latLng, map, description, category, photoUrl, link, markers);
+                }
+            });
+        }
+
+        // Function to place a marker at the clicked location
+        function placeMarker(location, map, description, category, photoUrl, link, markers) {
+            // Create a new marker at the clicked location
+            const marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: "Selected Location"
+            });
+
+            // Build the content for the info window
+            let infoContent = `<strong>Description:</strong> ${description}<br>`;
+            if (category) {
+                infoContent += `<strong>Category:</strong> ${category}<br>`;
+            }
+            if (photoUrl) {
+                infoContent += `<img src="${photoUrl}" alt="Location Photo" style="max-width: 200px; height: auto; margin-top: 10px;"><br>`;
+            }
+            if (link) {
+                infoContent += `<a href="${link}" target="_blank">Visit Website</a>`;
+            }
+
+            // Add a "Add to Favorites" button to the info window
+            infoContent += `<br><button onclick="addToFavorites('${description}')">Add to Favorites</button>`;
+
+            // Create an info window for the marker
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoContent
+            });
+
+            // Add a click listener to the marker to open the info window
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+                highlightCategory(category); // Highlight the relevant category button
+            });
+
+            // Save the marker and its details to the array
+            markers.push({ marker, description, category, photoUrl, link });
+
+            // Update category filters
+            updateCategoryFilters(markers);
+
+            // Optional: Log the details of the marker
+            console.log("Marker placed at:", location.lat(), location.lng(), "Description:", description, "Category:", category, "Photo URL:", photoUrl, "Link:", link);
+        }
+
+        // Function to add a marker to favorites
+        function addToFavorites(description) {
+            const favoritesUl = document.getElementById('favorites-ul');
+            const li = document.createElement('li');
+            li.textContent = description;
+            favoritesUl.appendChild(li);
+
+            // Show the favorites list if it's hidden
+            const favoritesList = document.getElementById('favorites-list');
+            favoritesList.style.display = 'block';
+
+            console.log("Added to favorites:", description);
+        }
+
+        // Function to toggle the favorites list visibility
+        function toggleFavorites() {
+            const favoritesList = document.getElementById('favorites-list');
+            if (favoritesList.style.display === 'none' || favoritesList.style.display === '') {
+                favoritesList.style.display = 'block'; // Show the list
+            } else {
+                favoritesList.style.display = 'none'; // Hide the list
+            }
+        }
+
+        // Function to update category filter buttons
+        function updateCategoryFilters(markers) {
+            const categoryFilters = document.getElementById('category-filters');
+            const categories = new Set();
+
+            // Collect unique categories from markers
+            markers.forEach(marker => {
+                if (marker.category) {
+                    categories.add(marker.category);
+                }
+            });
+
+            // Clear existing category buttons (except "Show All")
+            categoryFilters.innerHTML = '<button onclick="filterMarkers(\'all\')">Show All</button><button onclick="toggleFavorites()">My Favorites</button><button onclick="window.location.href=\'index.html\'">Back</button>';
+
+            // Add a button for each unique category
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.textContent = category;
+                button.onclick = () => filterMarkers(category);
+                categoryFilters.appendChild(button);
+            });
+        }
+
+        // Function to filter markers by category
+        function filterMarkers(category) {
+            markers.forEach(marker => {
+                if (category === 'all' || marker.category === category) {
+                    marker.marker.setVisible(true); // Show marker
+                } else {
+                    marker.marker.setVisible(false); // Hide marker
+                }
+            });
+        }
+
+        // Function to highlight the relevant category button
+        function highlightCategory(category) {
+            const buttons = document.querySelectorAll('#category-filters button');
+            buttons.forEach(button => {
+                if (button.textContent === category) {
+                    button.classList.add('highlighted'); // Highlight the button
+                } else {
+                    button.classList.remove('highlighted'); // Remove highlight from other buttons
+                }
+            });
+        }
+
+        // Function to show popular services details
+        function showPopularservices(service) {
+            alert(`You clicked on: ${service}. This feature is under development. Stay tuned!`);
+        }
+    </script>
+
+    <!-- Load the Google Maps API with your API key -->
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZ7l7sp4voo6WjVqQR5ydiP-tf7BD50OM&callback=initMap">
+    </script>
+</body>
+</html>
