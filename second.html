@@ -3,31 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Thrifters </title>
-    <!-- Include Raleway font from Google Fonts -->
+    <title>Welcome to Thrifters!</title>
+    <!-- Include the same fonts and styles as your main page -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Include FontAwesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
-    <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCkGIqGUxSzlPhZuXGlbgTho_4BD1Y54kA",
-            authDomain: "thrifties-325ae.firebaseapp.com",
-            projectId: "thrifties-325ae",
-            storageBucket: "thrifties-325ae.appspot.com",
-            messagingSenderId: "783907818946",
-            appId: "1:783907818946:web:85d4afc999d184fd9a5a5b",
-            measurementId: "G-VQZJTTLZ3Z"
-        };
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-    </script>
     <style>
-        /* General Styles */
         body {
             font-family: 'Raleway', sans-serif;
             margin: 0;
@@ -44,179 +24,98 @@
             color: #333;
         }
 
-        /* Header */
-        header {
+        .welcome-container {
             text-align: center;
-            margin-bottom: 40px;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px 30px;
+            padding: 40px 60px;
             border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 90%;
         }
 
         h1 {
             font-size: 2.5em;
             font-weight: 700;
             color: #333;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 0;
-        }
-
-        /* Main Button Container */
-        .main-button-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            width: 100%;
-            padding: 10px;
             margin-bottom: 20px;
         }
 
-        /* Account Button Container */
-        .account-button-container {
-            display: flex;
-            gap: 15px;
-            max-width: 800px;
-            width: 100%;
-            padding: 10px;
-            justify-content: center;
+        .welcome-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
         }
 
-        /* Buttons */
-        .button {
+        .button-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .welcome-button {
+            display: flex;
             align-items: center;
             justify-content: center;
             background-color: #fff;
             color: #333;
             text-decoration: none;
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: 500;
-            padding: 15px 10px;
+            padding: 15px 30px;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-width: 120px;
+            min-width: 150px;
         }
 
-        .account-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            color: #333;
-            text-decoration: none;
-            font-size: 0.85em;
-            font-weight: 500;
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .button i {
-            font-size: 1.5em;
-            margin-bottom: 8px;
+        .welcome-button i {
+            font-size: 1.3em;
+            margin-right: 10px;
             color: #00BFA5;
         }
 
-        .account-button i {
-            font-size: 1.2em;
-            margin-right: 6px;
-            margin-bottom: 0;
-            color: #00BFA5;
-        }
-
-        .button:hover, .account-button:hover {
+        .welcome-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
+            .welcome-container {
+                padding: 30px 20px;
+            }
+            
             h1 {
                 font-size: 2em;
             }
-
-            .subtitle {
-                font-size: 1em;
-            }
-
-            .main-button-container {
-                grid-template-columns: repeat(2, 1fr);
+            
+            .button-container {
+                flex-direction: column;
                 gap: 15px;
             }
-
-            .button {
-                padding: 12px 8px;
-                font-size: 0.95em;
-            }
-
-            .account-button-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .account-button {
-                width: 140px;
-                padding: 8px 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-button-container {
-                grid-template-columns: 1fr;
-            }
             
-            .button {
-                min-width: auto;
+            .welcome-button {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Thrifters</h1>
-        <p class="subtitle">Your neighborhood platform to buy, sell, and discover.</p>
-    </header>
-    
-    <div class="main-button-container">
-        <a href="events-map.html" class="button">
-            <i class="fas fa-calendar-alt"></i>
-            Events
-        </a>
-        <a href="secondhand.html" class="button">
-            <i class="fas fa-recycle"></i>
-            Second Hand
-        </a>
-        <a href="creators.html" class="button">
-            <i class="fas fa-palette"></i>
-            Creators
-        </a>
-        <a href="services.html" class="button">
-            <i class="fas fa-concierge-bell"></i>
-            Services
-        </a>
-    </div>
-    
-    <div class="account-button-container">
-        <a href="mywallet.html" class="account-button">
-            <i class="fas fa-wallet"></i>
-            My Wallet
-        </a>
-          <div class="account-button-container">
-                 <a href="myconnects.html" class="account-button">
-    <i class="fas fa-myconnects"></i>
-    My Connects
-</a>
+    <div class="welcome-container">
+        <h1>Welcome to Thrifters!</h1>
+        <p class="welcome-message">Are you interested in browsing or selling?</p>
+        
+        <div class="button-container">
+            <a href="thrifters-main.html" class="welcome-button">
+                <i class="fas fa-search"></i>
+                Browsing
+            </a>
+            <a href="thrifters-main.html" class="welcome-button">
+                <i class="fas fa-tag"></i>
+                Selling
+            </a>
+        </div>
     </div>
 </body>
 </html>
