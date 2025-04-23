@@ -3,16 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Thrifters!</title>
-    <!-- Include the same fonts and styles as your main page -->
+    <title> Thrifters </title>
+    <!-- Include Raleway font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Include FontAwesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkGIqGUxSzlPhZuXGlbgTho_4BD1Y54kA",
+            authDomain: "thrifties-325ae.firebaseapp.com",
+            projectId: "thrifties-325ae",
+            storageBucket: "thrifties-325ae.appspot.com",
+            messagingSenderId: "783907818946",
+            appId: "1:783907818946:web:85d4afc999d184fd9a5a5b",
+            measurementId: "G-VQZJTTLZ3Z"
+        };
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
     <style>
+        /* General Styles */
         body {
             font-family: 'Raleway', sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://media.istockphoto.com/id/2148659111/vector/dark-blue-light-color-wavy-gradient-with-rough-abstract-background-shine-bright-light-and.jpg?s=612x612&w=0&k=20&c=f90AvobUF2FH79qzzJXKcy1ngFo8FE-EislM2sX5VG8=');
+            background-image: url('https://livinggreenwich.com/wp-content/uploads/2020/12/James-Chillington-8.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -24,98 +44,179 @@
             color: #333;
         }
 
-        .welcome-container {
+        /* Header */
+        header {
             text-align: center;
+            margin-bottom: 40px;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px 60px;
+            padding: 20px 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
-            width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             font-size: 2.5em;
             font-weight: 700;
             color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        /* Main Button Container */
+        .main-button-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+            padding: 10px;
             margin-bottom: 20px;
         }
 
-        .welcome-message {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .button-container {
+        /* Account Button Container */
+        .account-button-container {
             display: flex;
+            gap: 15px;
+            max-width: 800px;
+            width: 100%;
+            padding: 10px;
             justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
         }
 
-        .welcome-button {
+        /* Buttons */
+        .button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            color: #333;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 500;
+            padding: 15px 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 120px;
+        }
+
+        .account-button {
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: #fff;
             color: #333;
             text-decoration: none;
-            font-size: 1.1em;
+            font-size: 0.85em;
             font-weight: 500;
-            padding: 15px 30px;
-            border-radius: 12px;
+            padding: 10px 15px;
+            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-width: 150px;
         }
 
-        .welcome-button i {
-            font-size: 1.3em;
-            margin-right: 10px;
+        .button i {
+            font-size: 1.5em;
+            margin-bottom: 8px;
             color: #00BFA5;
         }
 
-        .welcome-button:hover {
+        .account-button i {
+            font-size: 1.2em;
+            margin-right: 6px;
+            margin-bottom: 0;
+            color: #00BFA5;
+        }
+
+        .button:hover, .account-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        @media (max-width: 600px) {
-            .welcome-container {
-                padding: 30px 20px;
-            }
-            
+        /* Responsive Design */
+        @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
             }
-            
-            .button-container {
-                flex-direction: column;
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .main-button-container {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
+
+            .button {
+                padding: 12px 8px;
+                font-size: 0.95em;
+            }
+
+            .account-button-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .account-button {
+                width: 140px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-button-container {
+                grid-template-columns: 1fr;
+            }
             
-            .welcome-button {
-                width: 100%;
+            .button {
+                min-width: auto;
             }
         }
     </style>
 </head>
 <body>
-    <div class="welcome-container">
-        <h1>Welcome to Thrifters!</h1>
-        <p class="welcome-message">Are you interested in browsing or selling?</p>
-        
-        <div class="button-container">
-            <a href="thrifters-main.html" class="welcome-button">
-                <i class="fas fa-search"></i>
-                Browsing
-            </a>
-            <a href="thrifters-main.html" class="welcome-button">
-                <i class="fas fa-tag"></i>
-                Selling
-            </a>
-        </div>
+    <header>
+        <h1>Thrifters</h1>
+        <p class="subtitle">Your neighborhood platform to buy, sell, and discover.</p>
+    </header>
+    
+    <div class="main-button-container">
+        <a href="events-map.html" class="button">
+            <i class="fas fa-calendar-alt"></i>
+            Events
+        </a>
+        <a href="secondhand.html" class="button">
+            <i class="fas fa-recycle"></i>
+            Second Hand
+        </a>
+        <a href="creators.html" class="button">
+            <i class="fas fa-palette"></i>
+            Creators
+        </a>
+        <a href="services.html" class="button">
+            <i class="fas fa-concierge-bell"></i>
+            Services
+        </a>
+    </div>
+    
+    <div class="account-button-container">
+        <a href="mywallet.html" class="account-button">
+            <i class="fas fa-wallet"></i>
+            My Wallet
+        </a>
+          <div class="account-button-container">
+                 <a href="myconnects.html" class="account-button">
+    <i class="fas fa-myconnects"></i>
+    My Connects
+</a>
     </div>
 </body>
 </html>
