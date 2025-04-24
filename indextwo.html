@@ -69,9 +69,10 @@
 
         /* Main Button Container */
         .main-button-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            max-width: 800px;
+            width: 100%;
             gap: 20px;
             padding: 10px;
             margin-bottom: 20px;
@@ -196,8 +197,6 @@
             <i class="fas fa-concierge-bell"></i>
             Services
         </a>
-    </div>
-    <div class="main-button-container">
         <a href="events-map.html" class="button">
             <i class="fas fa-calendar-alt"></i>
             Events
