@@ -24,6 +24,7 @@
             justify-content: center;
             min-height: 100vh;
             color: #333;
+            position: relative;
         }
 
         /* Header */
@@ -36,38 +37,38 @@
         h1 {
             font-size: 2.5em;
             font-weight: 700;
-            color: #000; /* Changed to black */
+            color: #000;
             margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5); /* White shadow for contrast */
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
         }
 
         .subtitle {
             font-size: 1.2em;
-            color: #000; /* Changed to black */
+            color: #000;
             margin-bottom: 0;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5); /* White shadow for contrast */
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
         }
 
-        /* Main Button Container - Updated for 2x2 grid */
+        /* Main Button Container */
         .main-button-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns */
-            grid-template-rows: repeat(2, 1fr); /* 2 rows */
-            gap: 30px; /* Increased gap between buttons */
-            max-width: 600px; /* Adjusted max width */
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 600px;
             width: 100%;
             padding: 20px;
             margin-bottom: 30px;
         }
 
-        /* Account Button Container - Fixed duplicate container */
+        /* Account Button Container - Updated for icon-only buttons */
         .account-button-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
             display: flex;
-            gap: 20px;
-            max-width: 800px;
-            width: 100%;
-            padding: 10px;
-            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
         }
 
         /* Buttons */
@@ -81,12 +82,12 @@
             text-decoration: none;
             font-size: 1.1em;
             font-weight: 500;
-            padding: 25px 15px; /* Increased padding */
+            padding: 25px 15px;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-width: 150px; /* Increased min-width */
-            height: 120px; /* Fixed height for consistency */
+            min-width: 150px;
+            height: 120px;
         }
 
         .account-button {
@@ -96,29 +97,27 @@
             background-color: #fff;
             color: #333;
             text-decoration: none;
-            font-size: 0.9em;
-            font-weight: 500;
-            padding: 12px 18px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .button i {
-            font-size: 2em; /* Larger icons */
-            margin-bottom: 12px; /* More space below icons */
+            font-size: 2em;
+            margin-bottom: 12px;
             color: #00BFA5;
         }
 
         .account-button i {
-            font-size: 1.3em;
-            margin-right: 8px;
+            font-size: 1.2em;
             color: #00BFA5;
         }
 
         .button:hover, .account-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* Responsive Design */
@@ -141,10 +140,6 @@
                 font-size: 1em;
                 height: 110px;
             }
-
-            .account-button-container {
-                gap: 15px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -161,14 +156,31 @@
             }
 
             .account-button-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
+                top: 15px;
+                left: 15px;
+            }
+            
+            .account-button {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .account-button i {
+                font-size: 1em;
             }
         }
     </style>
 </head>
 <body>
+    <div class="account-button-container">
+        <a href="mywallet.html" class="account-button" title="My Wallet">
+            <i class="fas fa-wallet"></i>
+        </a>
+        <a href="myconnects.html" class="account-button" title="My Connects">
+            <i class="fas fa-users"></i>
+        </a>
+    </div>
+    
     <header>
         <h1>Thrifters</h1>
         <p class="subtitle">Your neighborhood platform to buy, sell, and discover.</p>
@@ -190,17 +202,6 @@
         <a href="secondhand.html" class="button">
             <i class="fas fa-recycle"></i>
             Second Hand
-        </a>
-    </div>
-    
-    <div class="account-button-container">
-        <a href="mywallet.html" class="account-button">
-            <i class="fas fa-wallet"></i>
-            My Wallet
-        </a>
-        <a href="myconnects.html" class="account-button">
-            <i class="fas fa-users"></i>
-            My Connects
         </a>
     </div>
 </body>
