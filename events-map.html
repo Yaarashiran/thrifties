@@ -38,7 +38,6 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow: hidden;
         }
         #title {
             position: absolute;
@@ -107,7 +106,6 @@
             display: flex;
             flex: 1;
             height: calc(100vh - 60px);
-            overflow-y: auto;
         }
         #events-list {
             width: 30%;
@@ -233,17 +231,6 @@
             padding: 15px;
             background-color: rgba(255, 255, 255, 0.9);
             border-top: 2px solid #2c6e49;
-            width: 100%;
-            box-sizing: border-box;
-            position: fixed;
-            bottom: -300px; /* Start hidden below viewport */
-            left: 0;
-            transition: bottom 0.3s ease;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
-        #calendar-container.visible {
-            bottom: 0; /* Show when scrolled down */
         }
         .calendar-header {
             display: flex;
@@ -307,76 +294,62 @@
         .calendar-day-number {
             font-size: 12px;
         }
-        
-        /* New layout */
-        #page-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        #content-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
     </style>
 </head>
 <body>
-    <div id="page-container">
-        <!-- Category filter buttons at the very top -->
-        <div id="category-filters">
-            <button onclick="filterEvents('music')">Music</button>
-            <button onclick="filterEvents('parties')">Parties</button>
-            <button onclick="filterEvents('hobbies')">Hobbies</button>
-            <button onclick="filterEvents('garage sales')">Garage Sales</button>
-            <button onclick="filterEvents('talks')">Talks</button>
-            <button onclick="filterEvents('english speaking')">English Speaking</button>
-            <button onclick="filterEvents('art')">Art</button>
-            <button onclick="resetFilters()">Show All</button>
-        </div>
+    <!-- Category filter buttons at the very top -->
+    <div id="category-filters">
+        <button onclick="filterEvents('music')">Music</button>
+        <button onclick="filterEvents('parties')">Parties</button>
+        <button onclick="filterEvents('hobbies')">Hobbies</button>
+        <button onclick="filterEvents('garage sales')">Garage Sales</button>
+        <button onclick="filterEvents('talks')">Talks</button>
+        <button onclick="filterEvents('english speaking')">English Speaking</button>
+        <button onclick="filterEvents('art')">Art</button>
+        <button onclick="resetFilters()">Show All</button>
+    </div>
 
-        <!-- Event filter buttons -->
-        <div id="event-filters">
-            <button onclick="window.location.href='index.html'">Back</button>
-            <button onclick="openAddEventModal()">Add Event</button>
-        </div>
+    <!-- Event filter buttons -->
+    <div id="event-filters">
+        <button onclick="window.location.href='index.html'">Back</button>
+        <button onclick="openAddEventModal()">Add Event</button>
+    </div>
 
-        <!-- Main content area -->
-        <div id="main-content">
-            <!-- Map container -->
-            <div id="map"></div>
+    <!-- Main content area -->
+    <div id="main-content">
+        <!-- Map container -->
+        <div id="map"></div>
 
-            <!-- Events list -->
-            <div id="events-list">
-                <div id="events-list-container">
-                    <h3>Upcoming Events</h3>
-                    <ul id="events-ul">
-                        <!-- Events will be added here dynamically -->
-                    </ul>
+        <!-- Events list and calendar -->
+        <div id="events-list">
+            <div id="events-list-container">
+                <h3>Upcoming Events</h3>
+                <ul id="events-ul">
+                    <!-- Events will be added here dynamically -->
+                </ul>
+            </div>
+            
+            <!-- Calendar Section -->
+            <div id="calendar-container">
+                <div class="calendar-header">
+                    <div class="calendar-title" id="calendar-month-year">Month Year</div>
+                    <div class="calendar-nav">
+                        <button onclick="previousMonth()">&lt;</button>
+                        <button onclick="nextMonth()">&gt;</button>
+                    </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Calendar Section at the bottom (hidden initially) -->
-        <div id="calendar-container">
-            <div class="calendar-header">
-                <div class="calendar-title" id="calendar-month-year">Month Year</div>
-                <div class="calendar-nav">
-                    <button onclick="previousMonth()">&lt;</button>
-                    <button onclick="nextMonth()">&gt;</button>
+                <div class="calendar-grid" id="calendar-days-header">
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
                 </div>
-            </div>
-            <div class="calendar-grid" id="calendar-days-header">
-                <div class="calendar-day-header">Sun</div>
-                <div class="calendar-day-header">Mon</div>
-                <div class="calendar-day-header">Tue</div>
-                <div class="calendar-day-header">Wed</div>
-                <div class="calendar-day-header">Thu</div>
-                <div class="calendar-day-header">Fri</div>
-                <div class="calendar-day-header">Sat</div>
-            </div>
-            <div class="calendar-grid" id="calendar-days">
-                <!-- Calendar days will be generated here -->
+                <div class="calendar-grid" id="calendar-days">
+                    <!-- Calendar days will be generated here -->
+                </div>
             </div>
         </div>
     </div>
@@ -461,32 +434,6 @@
             
             // Initialize calendar
             generateCalendar(currentMonth, currentYear);
-            
-            // Add scroll event listener to show/hide calendar
-            setupScrollListener();
-        }
-
-        // Set up scroll listener to show calendar when scrolling down
-        function setupScrollListener() {
-            const mainContent = document.getElementById('main-content');
-            const calendarContainer = document.getElementById('calendar-container');
-            
-            let lastScrollTop = 0;
-            
-            mainContent.addEventListener('scroll', function() {
-                const scrollTop = mainContent.scrollTop;
-                
-                // Show calendar when scrolling down
-                if (scrollTop > lastScrollTop && scrollTop > 50) {
-                    calendarContainer.classList.add('visible');
-                } 
-                // Hide calendar when scrolling up
-                else if (scrollTop < lastScrollTop) {
-                    calendarContainer.classList.remove('visible');
-                }
-                
-                lastScrollTop = scrollTop;
-            });
         }
 
         // Calendar functions
