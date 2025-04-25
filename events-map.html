@@ -231,6 +231,8 @@
             padding: 15px;
             background-color: rgba(255, 255, 255, 0.9);
             border-top: 2px solid #2c6e49;
+            width: 100%;
+            box-sizing: border-box;
         }
         .calendar-header {
             display: flex;
@@ -294,42 +296,65 @@
         .calendar-day-number {
             font-size: 12px;
         }
+        
+        /* New layout for calendar at bottom */
+        #page-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #content-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        #calendar-section {
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            height: 200px; /* Fixed height for calendar */
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
-    <!-- Category filter buttons at the very top -->
-    <div id="category-filters">
-        <button onclick="filterEvents('music')">Music</button>
-        <button onclick="filterEvents('parties')">Parties</button>
-        <button onclick="filterEvents('hobbies')">Hobbies</button>
-        <button onclick="filterEvents('garage sales')">Garage Sales</button>
-        <button onclick="filterEvents('talks')">Talks</button>
-        <button onclick="filterEvents('english speaking')">English Speaking</button>
-        <button onclick="filterEvents('art')">Art</button>
-        <button onclick="resetFilters()">Show All</button>
-    </div>
+    <div id="page-container">
+        <!-- Category filter buttons at the very top -->
+        <div id="category-filters">
+            <button onclick="filterEvents('music')">Music</button>
+            <button onclick="filterEvents('parties')">Parties</button>
+            <button onclick="filterEvents('hobbies')">Hobbies</button>
+            <button onclick="filterEvents('garage sales')">Garage Sales</button>
+            <button onclick="filterEvents('talks')">Talks</button>
+            <button onclick="filterEvents('english speaking')">English Speaking</button>
+            <button onclick="filterEvents('art')">Art</button>
+            <button onclick="resetFilters()">Show All</button>
+        </div>
 
-    <!-- Event filter buttons -->
-    <div id="event-filters">
-        <button onclick="window.location.href='index.html'">Back</button>
-        <button onclick="openAddEventModal()">Add Event</button>
-    </div>
+        <!-- Event filter buttons -->
+        <div id="event-filters">
+            <button onclick="window.location.href='index.html'">Back</button>
+            <button onclick="openAddEventModal()">Add Event</button>
+        </div>
 
-    <!-- Main content area -->
-    <div id="main-content">
-        <!-- Map container -->
-        <div id="map"></div>
+        <!-- Main content area -->
+        <div id="content-container">
+            <!-- Map container -->
+            <div id="map"></div>
 
-        <!-- Events list and calendar -->
-        <div id="events-list">
-            <div id="events-list-container">
-                <h3>Upcoming Events</h3>
-                <ul id="events-ul">
-                    <!-- Events will be added here dynamically -->
-                </ul>
+            <!-- Events list -->
+            <div id="events-list">
+                <div id="events-list-container">
+                    <h3>Upcoming Events</h3>
+                    <ul id="events-ul">
+                        <!-- Events will be added here dynamically -->
+                    </ul>
+                </div>
             </div>
-            
-            <!-- Calendar Section -->
+        </div>
+        
+        <!-- Calendar Section at the bottom -->
+        <div id="calendar-section">
             <div id="calendar-container">
                 <div class="calendar-header">
                     <div class="calendar-title" id="calendar-month-year">Month Year</div>
